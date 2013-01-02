@@ -192,6 +192,10 @@ Library/previews
 
 Library/guidmapper
 
+Assets/Models
+
+Assets/Textures-Materials
+
 Temp
 
 *.csproj
