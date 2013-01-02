@@ -168,41 +168,57 @@ pip-log.txt
 
 #	 Store this file at the root of your local repository.
 
-.DS_Store
-
-Library/AssetImportState
-
-Library/AssetServerCacheV3
-
-Library/FailedAssetImports.txt
-
-Library/ScriptAssemblies
-
-Library/ScriptMapper
-
-Library/assetDatabase3
-
-Library/cache
-
-Library/expandedItems
-
-Library/metadata
-
-Library/previews
-
-Library/guidmapper
-
-Assets/Models
-
-Assets/Textures-Materials
-
-Temp
-
-*.csproj
-
+*.bmp
+*.BMP
+*.psd
+*.PSD
+*.tif
+*.TIF
+*.tiff
+*.TIFF
+*.pdf
+*.PDF
+*.ttf
+*.TTF
+*.ZIP
+*.zip
+*.rtf
+*.png
+#Unity files
+*.cginc
+*.prefab
+*.unity
+*.unity3d
+*.shader
+*.asset
+*.GUISkin
+*.mat
+*.rendertexture
+*.physicmaterial
+*.flare:
+#3D tool files
+*.fbx
+*.FBX
+*.anim
+*.fbm
+*.exr
+*.otf
+*.max
+*.blend
+#Media files
+*.ogg
+*.ogv
+*.raw
+*.wav
+*.WAV
+*.wave
+*.MOV
+*.mov
+#other stuff
+Library/
+Temp/
 *.pidb
-
-*.sln
+.DS_Store
 
 build
 
