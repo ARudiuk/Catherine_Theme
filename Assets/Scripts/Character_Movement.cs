@@ -13,17 +13,17 @@ public class Character_Movement : MonoBehaviour {
 	if(Input.GetButtonDown("Horizontal")){
 		float test = Input.GetAxis("Horizontal");
 		if (test>0){
-			transform.Translate(transform.TransformDirection(new Vector3(-1,0,0)));}
+			transform.Translate(transform.InverseTransformDirection(new Vector3(1,0,0)));}
 		else
-			transform.Translate(transform.TransformDirection(new Vector3(1,0,0)));
+			transform.Translate(transform.InverseTransformDirection(new Vector3(-1,0,0)));
 	}
 
 	if(Input.GetButtonDown("Vertical")){
 		float test = Input.GetAxis("Vertical");
 		if (test>0){
-			transform.Translate(transform.TransformDirection(new Vector3(0,0,-1)));}
+			transform.Translate(transform.InverseTransformDirection(new Vector3(0,0,1)));}
 		else
-			transform.Translate(transform.TransformDirection(new Vector3(0,0,1)));
+			transform.Translate(transform.InverseTransformDirection(new Vector3(0,0,-1)));
 	}
 	}
 }
