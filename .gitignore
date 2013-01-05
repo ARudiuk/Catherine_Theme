@@ -214,10 +214,7 @@ pip-log.txt
 *.MOV
 *.mov
 #other stuff
-/Library/FailedAssetImports.txt
-/Library/cache/
-/Library/previews/
-/Library/ScriptAssemblies
+/Library
 /Temp
 /obj
 *.pidb
