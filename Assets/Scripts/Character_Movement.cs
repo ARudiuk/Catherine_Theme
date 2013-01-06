@@ -34,7 +34,7 @@ public class Character_Movement : MonoBehaviour {
 	void Update()
 	{
 		Debug.DrawRay(transform.position,transform.TransformDirection(Forward),Color.red); //shows debug of ray collision, check scene view
-		if(Input.GetButton("Horizontal")) //checks left/right directional keys
+		if(Input.GetButton("Horizontal") && !Input.GetButton("Grab")) //checks left/right directional keys and if grab isn't pressed
 		{
 			float test = Input.GetAxis("Horizontal");//check if movement is along x-axis
 			if (test>0) //if right
@@ -78,7 +78,7 @@ public class Character_Movement : MonoBehaviour {
 			}		
 		}
 
-		if(Input.GetButton("Vertical")) //same as last if block, except checks up/down directional keys
+		if(Input.GetButton("Vertical")&& !Input.GetButton("Grab")) //same as last if block, except checks up/down directional keys
 			{
 			float test = Input.GetAxis("Vertical");//check if movement is along z-axis
 			if (test>0)
@@ -120,10 +120,11 @@ public class Character_Movement : MonoBehaviour {
 				timeD.time -= timetoMove;
 			}
 			}
-		if(!Input.GetButton("Vertical")&&!Input.GetButton("Horizontal")) //resets if no direction is held
+		if(!Input.GetButton("Vertical")&&!Input.GetButton("Horizontal") || Input.GetButton("Grab")) //resets if no direction is held or grab held
 			timeD.time = 0f;			
 
-		Debug.Log(timeD.time);
+		if(timeD.time!=0)
+			Debug.Log(timeD.time);
 
 	}
 
