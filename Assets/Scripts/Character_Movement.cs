@@ -7,32 +7,14 @@ public class Character_Movement : MonoBehaviour {
 	private Vector3 Forward = new Vector3(0,0,-1); // saved this forward vector since used often
 	public float timetoMove; // variable to tweak how long you have to hold a direction to move
 	private timeDirection timeD; // variable that holds information on what direction is faced, and how long the button for that direction was held down
+	public bool Hanging;
 	void Start () {
 		timeD=new timeDirection(0f,"none");	//initializess the timeD varible, see bottom for structure
+		Hanging = false; // doesn't do anything yet
 	}
 	
-	//Update that doesn't take into account rotation
-	// Update is called once per frame
-	/*void Update () {
-	if(Input.GetButtonDown("Horizontal")){
-		float test = Input.GetAxis("Horizontal");
-		if (test>0){
-			transform.Translate(transform.InverseTransformDirection(new Vector3(1,0,0)));}
-		else
-			transform.Translate(transform.InverseTransformDirection(new Vector3(-1,0,0)));
-	}
-
-	if(Input.GetButtonDown("Vertical")){
-		float test = Input.GetAxis("Vertical");
-		if (test>0){
-			transform.Translate(transform.InverseTransformDirection(new Vector3(0,0,1)));}
-		else
-			transform.Translate(transform.InverseTransformDirection(new Vector3(0,0,-1)));
-	}
-	}
-	*/
 	void Update()
-	{
+	{	
 		Debug.DrawRay(transform.position,transform.TransformDirection(Forward),Color.red); //shows debug of ray collision, check scene view
 		if(Input.GetButton("Horizontal") && !Input.GetButton("Grab")) //checks left/right directional keys and if grab isn't pressed
 		{
@@ -109,25 +91,26 @@ public class Character_Movement : MonoBehaviour {
 
 		if(timeD.time!=0)
 			Debug.Log(timeD.time);
+	
 
-	}
+		}
 
-	public void move()
-	{
-		if(!Physics.Raycast(transform.position,transform.TransformDirection(Forward),1)&&timeD.time>timetoMove) //if there is no collision ahead, and the time is large enough then move
-				{
-					transform.Translate(Forward); //translate object in forward direction
-					timeD.time -= timetoMove; //subtracts time so unit doesn't move immediately 
-				}	
-			else if(Physics.Raycast(transform.position,transform.TransformDirection(Forward),1)&&timeD.time>timetoMove
-			&&!Physics.Raycast(transform.position,new Vector3(0,1,0),1)&&!Physics.Raycast(transform.position+transform.TransformDirection(Forward),new Vector3(0,0,new Vector3(0,1,0),1)) //if collison then same as above, but also move up a unit
-			//this block needs to be updated to check for stacks higher than one ahead
+		public void move()
+		{
+			if(!Physics.Raycast(transform.position,transform.TransformDirection(Forward),1)&&timeD.time>timetoMove) //if there is no collision ahead, and the time is large enough then move
+					{
+						transform.Translate(Forward); //translate object in forward direction
+						timeD.time -= timetoMove; //subtracts time so unit doesn't move immediately 
+					}	
+			else if(Physics.Raycast(transform.position,transform.TransformDirection(Forward),1) && timeD.time>timetoMove && !Physics.Raycast(transform.position,new Vector3(0,1,0),1) 
+			&& !Physics.Raycast(transform.position+transform.TransformDirection(Forward),new Vector3(0,1,0),1)) //if not unit above the block infront, and no block above, then move up a block
 			{
-				transform.Translate(new Vector3(0,1,-1));
-				timeD.time -= timetoMove;
+					transform.Translate(new Vector3(0,1,-1));
+					timeD.time -= timetoMove;
 			}
-	}
+		}
 
+	}	
 	public struct timeDirection //structure that holds direction of player, and time button is held for that direction
 	{
 		public float time;
@@ -139,5 +122,5 @@ public class Character_Movement : MonoBehaviour {
 			direction = y;
 		}
 	}
-}
+
 
