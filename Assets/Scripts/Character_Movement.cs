@@ -64,18 +64,9 @@ public class Character_Movement : MonoBehaviour {
 				{
 					timeD.time += Time.deltaTime;
 				}	
-			}
-			if(!Physics.Raycast(transform.position,transform.TransformDirection(Forward),1)&&timeD.time>timetoMove) //if there is no collision ahead, and the time is large enough then move
-				{
-					transform.Translate(Forward); //translate object in forward direction
-					timeD.time -= timetoMove; //subtracts time so unit doesn't move immediately 
-				}	
-			else if(Physics.Raycast(transform.position,transform.TransformDirection(Forward),1)&&timeD.time>timetoMove) //if collison then same as above, but also move up a unit
-			//this block needs to be updated to check for stacks higher than one ahead
-			{
-				transform.Translate(new Vector3(0,1,-1));
-				timeD.time -= timetoMove;
 			}		
+
+			move();			
 		}
 
 		if(Input.GetButton("Vertical")&& !Input.GetButton("Grab")) //same as last if block, except checks up/down directional keys
@@ -109,16 +100,9 @@ public class Character_Movement : MonoBehaviour {
 					timeD.time += Time.deltaTime;
 				}				
 			}			
-			if(!Physics.Raycast(transform.position,transform.TransformDirection(Forward),1)&&timeD.time>timetoMove)
-				{
-					transform.Translate(Forward);
-					timeD.time -= timetoMove;
-				}
-			else if(Physics.Raycast(transform.position,transform.TransformDirection(Forward),1)&&timeD.time>timetoMove)
-			{
-				transform.Translate(new Vector3(0,1,-1));
-				timeD.time -= timetoMove;
-			}
+			
+			move();
+
 			}
 		if(!Input.GetButton("Vertical")&&!Input.GetButton("Horizontal") || Input.GetButton("Grab")) //resets if no direction is held or grab held
 			timeD.time = 0f;			
@@ -126,6 +110,22 @@ public class Character_Movement : MonoBehaviour {
 		if(timeD.time!=0)
 			Debug.Log(timeD.time);
 
+	}
+
+	public void move()
+	{
+		if(!Physics.Raycast(transform.position,transform.TransformDirection(Forward),1)&&timeD.time>timetoMove) //if there is no collision ahead, and the time is large enough then move
+				{
+					transform.Translate(Forward); //translate object in forward direction
+					timeD.time -= timetoMove; //subtracts time so unit doesn't move immediately 
+				}	
+			else if(Physics.Raycast(transform.position,transform.TransformDirection(Forward),1)&&timeD.time>timetoMove
+			&&!Physics.Raycast(transform.position,new Vector3(0,1,0),1)&&!Physics.Raycast(transform.position+transform.TransformDirection(Forward),new Vector3(0,0,new Vector3(0,1,0),1)) //if collison then same as above, but also move up a unit
+			//this block needs to be updated to check for stacks higher than one ahead
+			{
+				transform.Translate(new Vector3(0,1,-1));
+				timeD.time -= timetoMove;
+			}
 	}
 
 	public struct timeDirection //structure that holds direction of player, and time button is held for that direction

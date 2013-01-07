@@ -10,6 +10,6 @@ public class Character_Movement_Ledge : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		//if(Physics.Raycast(transform.position,new Vector3(0,0,-1)
 	}
 }
