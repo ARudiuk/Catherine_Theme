@@ -5,8 +5,11 @@ public class Character_Movement : MonoBehaviour {
 
 	// Use this for initialization
 	private Vector3 Forward = new Vector3(0,0,-1); // saved this forward vector since used often
+	private Vector3 Back = new Vector3(0,0,1);
+	private Vector3 Left = new Vector3(-1,0,0);
+	private Vector3 Right = new Vector3(1,0,0);
 	public float timetoMove; // variable to tweak how long you have to hold a direction to move
-	private timeDirection timeD; // variable that holds information on what direction is faced, and how long the button for that direction was held down
+	public timeDirection timeD; // variable that holds information on what direction is faced, and how long the button for that direction was held down
 	void Start () {
 		timeD=new timeDirection(0f,"none");	//initializess the timeD varible, see bottom for structure
 	}
@@ -34,6 +37,9 @@ public class Character_Movement : MonoBehaviour {
 	void Update()
 	{
 		Debug.DrawRay(transform.position,transform.TransformDirection(Forward),Color.red); //shows debug of ray collision, check scene view
+		Debug.DrawRay(transform.position,transform.TransformDirection(Back),Color.blue);
+		Debug.DrawRay(transform.position,transform.TransformDirection(Left),Color.green);
+		Debug.DrawRay(transform.position,transform.TransformDirection(Right),Color.green);
 		if(Input.GetButton("Horizontal") && !Input.GetButton("Grab")) //checks left/right directional keys and if grab isn't pressed
 		{
 			float test = Input.GetAxis("Horizontal");//check if movement is along x-axis
