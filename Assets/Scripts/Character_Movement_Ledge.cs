@@ -10,8 +10,7 @@ public class Character_Movement_Ledge : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update () {	
 		if(!Physics.Raycast(transform.position,new Vector3(0,-1,0),1)&&Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,1)),1)
 			&& !mov.Hanging)
 		{
@@ -30,22 +29,48 @@ public class Character_Movement_Ledge : MonoBehaviour {
 
 		if(mov.Hanging)
 		{
-			if (Input.GetButton("Horizontal"))
+			Debug.DrawRay(transform.position+transform.TransformDirection(new Vector3(0,0,-1)),transform.TransformDirection(new Vector3(1,0,0)),Color.red); //shows debug of ray collision, check scene view
+
+			if (Input.GetButtonDown("Horizontal"))
 			{
 				float test = Input.GetAxis("Horizontal");
 				{
 					if (test>0)
 					{
-						transform.Translate(transform.TransformDirection(new Vector3(1,0,0)));
+						if(Physics.Raycast(transform.position+transform.TransformDirection(new Vector3(0,0,-1)),transform.TransformDirection(new Vector3(-1,0,0)),1))
+							transform.Translate(new Vector3(-1,0,0));
+						else
+							transform.RotateAround(transform.position+transform.TransformDirection(new Vector3(0,0,-1)),new Vector3(0,1,0),270);
 					}
 
 					else
 					{
-						transform.Translate(transform.TransformDirection(new Vector3(-1,0,0)));
-
+						if(Physics.Raycast(transform.position+transform.TransformDirection(new Vector3(0,0,-1)),transform.TransformDirection(new Vector3(1,0,0)),1))
+							transform.Translate(new Vector3(1,0,0));
+						else
+							transform.RotateAround(transform.position+transform.TransformDirection(new Vector3(0,0,-1)),new Vector3(0,1,0),90);
 					}
 				}
+
 			}
+
+			if (Input.GetButtonDown("Vertical"))
+				{
+					float test = Input.GetAxis("Vertical");
+
+					if (test>0)
+						{
+							transform.Translate(new Vector3(0,0.1f,-1));
+							mov.Hanging = false;
+							rigidbody.useGravity = true;
+						}
+					else
+					{
+						transform.Translate(new Vector3(0,-1f,0));
+						mov.Hanging = false;
+						rigidbody.useGravity = true;
+					}
+				}
 		}		
 	}
 }
