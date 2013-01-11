@@ -31,7 +31,7 @@ public class Character_Movement : MonoBehaviour {
 		Debug.DrawRay(transform.position,transform.TransformDirection(Up),Color.black);	
 		Debug.DrawRay(transform.position,transform.TransformDirection(Down),Color.black);	
 		
-		 checkDir = timeD.direction;
+		checkDir = timeD.direction;
 
 		if(!Hanging)
 		{

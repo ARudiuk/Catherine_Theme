@@ -7,8 +7,9 @@ public class Character_Movement_Ledge : MonoBehaviour {
 	private Vector3 diagRight = new Vector3(-1,1,0);
 	private Vector3 diagRightF = new Vector3(-1,1,-1);
 	private Vector3 diagLeftF = new Vector3(1,1,-1);
+
 	public float test;
-	
+
 	private Character_Movement mov;
 	// Use this for initialization
 	void Start () {
@@ -19,6 +20,12 @@ public class Character_Movement_Ledge : MonoBehaviour {
 	void Update () {	
 		
 		Character_Movement other = gameObject.GetComponent<Character_Movement>();
+
+		//Debug.DrawRay(transform.position,transform.TransformDirection(diagRight),Color.magenta);
+		Debug.DrawRay(transform.position,transform.TransformDirection(diagLeft),Color.magenta);
+		//Debug.DrawRay(transform.position,transform.TransformDirection(diagRightF),Color.magenta);
+		Debug.DrawRay(transform.position,transform.TransformDirection(diagLeftF),Color.magenta);
+
 		
 		if(!Physics.Raycast(transform.position,new Vector3(0,-1,0),1)&&Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,1)),1)
 			&& !mov.Hanging)
@@ -73,6 +80,7 @@ public class Character_Movement_Ledge : MonoBehaviour {
 				if (test > 0 && (r1 || r2 || r3))
 					{
 						ledgeMoveR(ref other);
+
 					}
 						
 				else if( test < 0 && (l1 || l2 || l3))
@@ -81,7 +89,10 @@ public class Character_Movement_Ledge : MonoBehaviour {
 				}
 
 			}
+
 			//fix getting blcked chceck for hit on side raycasts
+
+
 			if(Input.GetButton("Grab"))
 				{
 					if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,-1,0)),1))

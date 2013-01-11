@@ -5,15 +5,17 @@ public class Block_Move : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+
 	}
 	
 	public bool chosen = false;
 	bool grabbed = false;
+
 	public Animation grab;
 	public Animation letGo;
 	public GameObject a;
 	public Vector3 pushDirection = new Vector3(0,0,0);
-		
+
 	// Update is called once per frame
 	void Update () {
 		
@@ -24,13 +26,16 @@ public class Block_Move : MonoBehaviour {
 		RaycastHit left;
 		RaycastHit right;
 		RaycastHit back;
-		
+
+		Vector3 direction;
+				
 		
 		if(Input.GetButton("Grab"))
 		{
 			if(!grabbed)
 			{
 				//a.animation.Play ("grab2");
+
 				grabbed = true;
 			}
 			if(!chosen)
@@ -103,6 +108,9 @@ public class Block_Move : MonoBehaviour {
 							pushDirection = new Vector3(-1,0,0);}						
 
 						front.transform.Translate(pushDirection);
+
+						front.transform.Translate(direction);
+
 						
 						if(Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0,0,-1)),new Vector3(0,-1,0),1))
 							other.pushStep(test);
@@ -122,7 +130,11 @@ public class Block_Move : MonoBehaviour {
 						else{
 							pushDirection = new Vector3(0,0,-1);}	
 
+
 						front.transform.Translate(pushDirection);
+
+						front.transform.Translate(direction);
+
 						
 						if(Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0,0,-1)),new Vector3(0,-1,0),1))
 							other.pushStep(test);
