@@ -8,9 +8,13 @@ public class Character_Movement : MonoBehaviour {
 	private Vector3 Back = new Vector3(0,0,1);
 	private Vector3 Left = new Vector3(-1,0,0);
 	private Vector3 Right = new Vector3(1,0,0);
+	private Vector3 Up = new Vector3(0,1,0);
+	private Vector3 Down = new Vector3(0,-1,0);
+	
 	public float timetoMove; // variable to tweak how long you have to hold a direction to move
 
 	public timeDirection timeD; // variable that holds information on what direction is faced, and how long the button for that direction was held down
+	public string checkDir;
 	public bool Hanging;
 
 	void Start () {
@@ -24,6 +28,10 @@ public class Character_Movement : MonoBehaviour {
 		Debug.DrawRay(transform.position,transform.TransformDirection(Back),Color.blue);
 		Debug.DrawRay(transform.position,transform.TransformDirection(Left),Color.green);
 		Debug.DrawRay(transform.position,transform.TransformDirection(Right),Color.green);		
+		Debug.DrawRay(transform.position,transform.TransformDirection(Up),Color.black);	
+		Debug.DrawRay(transform.position,transform.TransformDirection(Down),Color.black);	
+		
+		 checkDir = timeD.direction;
 
 		if(!Hanging)
 		{
@@ -120,6 +128,20 @@ public class Character_Movement : MonoBehaviour {
 					transform.Translate(new Vector3(0,1,-1));
 					timeD.time -= timetoMove;
 			}
+		}
+	
+		public void pushStep(float dir)
+		{
+			if(timeD.direction== "up" || timeD.direction== "right" )
+				if(dir>0)
+					transform.Translate(Forward);
+				else
+					transform.Translate(-Forward);
+			else
+				if(dir>0)
+					transform.Translate(-Forward);
+				else
+					transform.Translate(Forward);
 		}
 
 	}	
