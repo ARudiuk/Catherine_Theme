@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class BlockRowFall : MonoBehaviour {
+public class Block_RowFall : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
