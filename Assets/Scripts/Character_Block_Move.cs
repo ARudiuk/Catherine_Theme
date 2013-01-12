@@ -38,37 +38,37 @@ public class Character_Block_Move : MonoBehaviour {
 			}
 			if(!chosen)
 			{
-			if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,-1)),out front,1))
-				{
-				//unnecessary just for clarity
-					transform.Rotate(new Vector3(0,0,0));
-					chosen = true;
-				}
+				if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,-1)),out front,1))
+					{
+					//unnecessary just for clarity
+						transform.Rotate(new Vector3(0,0,0));
+						chosen = true;
+					}
+					
+				else{
 				
-			else{
-			
-				if(other.timeD.direction == "right" || other.timeD.direction == "up")
-				{
-					if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(1,0,0)),out left,1))
+					if(other.timeD.direction == "right" || other.timeD.direction == "up")
 					{
-						transform.Rotate(new Vector3(0,-90,0));
-						chosen = true;
-						RotateTimeD("l", ref other);
+						if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(1,0,0)),out left,1))
+						{
+							transform.Rotate(new Vector3(0,-90,0));
+							chosen = true;
+							RotateTimeD("l", ref other);
+						}
+					else if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(-1,0,0)),out right,1))
+						{
+							transform.Rotate(new Vector3(0,90,0));
+							chosen = true;
+							RotateTimeD("r", ref other);
+						}
+					else if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,1)),out back,1))
+						{
+							transform.Rotate(new Vector3(0,180,0));
+							chosen = true;
+							RotateTimeD("d", ref other);
+						}
 					}
-				else if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(-1,0,0)),out right,1))
-					{
-						transform.Rotate(new Vector3(0,90,0));
-						chosen = true;
-						RotateTimeD("r", ref other);
-					}
-				else if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,1)),out back,1))
-					{
-						transform.Rotate(new Vector3(0,180,0));
-						chosen = true;
-						RotateTimeD("d", ref other);
-					}
-				}
-				
+					
 					else //left/down
 					{
 						if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(-1,0,0)),out right,1))
@@ -91,7 +91,7 @@ public class Character_Block_Move : MonoBehaviour {
 							RotateTimeD("d", ref other);
 						}
 					}	
-				}
+					}
 			}
 			if(Input.GetButtonDown("Horizontal"))
 			{
@@ -105,7 +105,7 @@ public class Character_Block_Move : MonoBehaviour {
 						else{
 							pushDirection = new Vector3(-1,0,0);}						
 
-						front.transform.gameObject.GetComponent<Block_Move>().move(pushDirection); //front here is the returned cube, i.e. cube infront
+						front.transform.gameObject.GetComponent<Block_Move>().move(pushDirection); //front here is the returned cube
 		
 						if(Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0,0,-1)),new Vector3(0,-1,0),1))
 							other.pushStep(test);
