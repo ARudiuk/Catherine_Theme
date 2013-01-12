@@ -24,9 +24,7 @@ public class CheckForBelowBlocks : MonoBehaviour {
 	bool wasItEdged;
 	
 	//public GameObject[] blocks;
-
 	//will be used when dropping a level at a time.
-
 	public int lowestLevel;
 	
 	// Use this for initialization

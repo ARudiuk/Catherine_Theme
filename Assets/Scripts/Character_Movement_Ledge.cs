@@ -7,9 +7,8 @@ public class Character_Movement_Ledge : MonoBehaviour {
 	private Vector3 diagRight = new Vector3(-1,1,0);
 	private Vector3 diagRightF = new Vector3(-1,1,-1);
 	private Vector3 diagLeftF = new Vector3(1,1,-1);
-
 	public float test;
-
+	
 	private Character_Movement mov;
 	// Use this for initialization
 	void Start () {
@@ -20,34 +19,11 @@ public class Character_Movement_Ledge : MonoBehaviour {
 	void Update () {	
 		
 		Character_Movement other = gameObject.GetComponent<Character_Movement>();
-
-		//Debug.DrawRay(transform.position,transform.TransformDirection(diagRight),Color.magenta);
-		Debug.DrawRay(transform.position,transform.TransformDirection(diagLeft),Color.magenta);
-		//Debug.DrawRay(transform.position,transform.TransformDirection(diagRightF),Color.magenta);
-		Debug.DrawRay(transform.position,transform.TransformDirection(diagLeftF),Color.magenta);
-
 		
 		if(!Physics.Raycast(transform.position,new Vector3(0,-1,0),1)&&Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,1)),1)
 			&& !mov.Hanging)
 		{
-			mov.Hanging = true;
-			transform.Rotate(new Vector3(0,180,0));
-			
-			if(other.timeD.direction == "up")
-				other.timeD.direction = "down";
-			
-			if(other.timeD.direction == "left")
-				other.timeD.direction = "right";
-			
-			if(other.timeD.direction == "down")
-				other.timeD.direction = "up";
-			
-			if(other.timeD.direction == "right")
-				other.timeD.direction = "left";
-			
-			rigidbody.useGravity = false;
-			rigidbody.velocity = new Vector3(0,0,0);
-
+			startHanging(ref other);
 		}		
 
 		else if(!Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,-1)),1)&& mov.Hanging)
@@ -55,44 +31,46 @@ public class Character_Movement_Ledge : MonoBehaviour {
 			mov.Hanging = false;
 			rigidbody.useGravity = true;
 		}
-
-		if(mov.Hanging)
+		//I broke ledge hanging I'm shit I know
+		//this input check may need fixing later when movement has been smootehr
+		if(mov.Hanging && !Input.GetButton("Grab"))
 		{
-			Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-1,0,-1)),new Vector3(0,1,0),Color.red); //shows debug of ray collision, check scene view
-			Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(1,0,-1)),new Vector3(0,1,0),Color.red);
-			Debug.DrawRay(transform.position, transform.TransformDirection(new Vector3(-1,0,0)),Color.cyan);
+			//Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-1,0,-1)),new Vector3(0,1,0),Color.red); //shows debug of ray collision, check scene view
+			//Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(1,0,-1)),new Vector3(0,1,0),Color.red);
+			Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(1,0,0)),-transform.forward,Color.cyan);		
+			Debug.DrawRay(transform.position, transform.right,Color.red);		
+			Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(1,1,0)),-transform.forward,Color.magenta);
 			
-			//"3" is being called when I press left which is impossible. 
 			if (Input.GetButtonDown("Horizontal"))
 			{
 				test = Input.GetAxis("Horizontal");
 				
-				//still messed
-				
 				bool r1 = !(Physics.Raycast(transform.position,transform.TransformDirection(diagRight),1) || Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-1,0,-1)),new Vector3(0,1,0),1));
 				bool r2 = Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(-1,0,0)),1);
-				bool r3 = Physics.Raycast(transform.position + new Vector3(1,0,0),transform.forward);
+				bool r3 = Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-1,0,0)),-transform.forward,1);
+				bool r4 = !Physics.Raycast(transform.position, -transform.right,1) && Physics.Raycast(transform.position + transform.up, -transform.right,1);
+				bool r5 = !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-1,0,0)),-transform.forward,1) && !Physics.Raycast(transform.position, -transform.right,1);
+				bool r6 = !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-1,1,0)),-transform.forward,1);
 				
-				bool l1  = !(Physics.Raycast(transform.position,transform.TransformDirection(diagLeft),1) || Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(1,0,-1)),new Vector3(0,1,0),1));
-				bool l2  = Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(-1,0,0)),1);
-				bool l3  = Physics.Raycast(transform.position + new Vector3(-1,0,0),-transform.forward);
+				bool l1 = !(Physics.Raycast(transform.position,transform.TransformDirection(diagLeft),1) || Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(1,0,-1)),new Vector3(0,1,0),1));
+				bool l2 = Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(1,0,0)),1);
+				bool l3 = Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(1,0,0)),-transform.forward,1);
+				bool l4 = !Physics.Raycast(transform.position, transform.right,1) && Physics.Raycast(transform.position + transform.up, transform.right,1);
+				bool l5 = !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(1,0,0)),-transform.forward,1) && !Physics.Raycast(transform.position, transform.right,1);
+				bool l6 = !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(1,1,0)),-transform.forward,1);
 				
-				if (test > 0 && (r1 || r2 || r3))
+				if (test > 0 && (r1 || r2 || r3) && !r4 && (!r5 || r6))
 					{
 						ledgeMoveR(ref other);
-
 					}
 						
-				else if( test < 0 && (l1 || l2 || l3))
+				else if( test < 0 && (l1 || l2 || l3) && !l4 && (!l5 || l6))
 				{
 					ledgeMoveL(ref other);	
 				}
 
 			}
-
 			//fix getting blcked chceck for hit on side raycasts
-
-
 			if(Input.GetButton("Grab"))
 				{
 					if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,-1,0)),1))
@@ -287,5 +265,25 @@ public class Character_Movement_Ledge : MonoBehaviour {
 		}
 	}
 	
+	public void startHanging(ref Character_Movement other)
+	{
+			mov.Hanging = true;
+			transform.Rotate(new Vector3(0,180,0));
+			
+			if(other.timeD.direction == "up")
+				other.timeD.direction = "down";
+			
+			if(other.timeD.direction == "left")
+				other.timeD.direction = "right";
+			
+			if(other.timeD.direction == "down")
+				other.timeD.direction = "up";
+			
+			if(other.timeD.direction == "right")
+				other.timeD.direction = "left";
+			
+			rigidbody.useGravity = false;
+			rigidbody.velocity = new Vector3(0,0,0);	
+	}
 	
 }

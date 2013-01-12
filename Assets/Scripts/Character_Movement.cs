@@ -16,6 +16,7 @@ public class Character_Movement : MonoBehaviour {
 	public timeDirection timeD; // variable that holds information on what direction is faced, and how long the button for that direction was held down
 	public string checkDir;
 	public bool Hanging;
+	public bool isFalling;
 
 	void Start () {
 		timeD=new timeDirection(0f,"none");	//initializess the timeD varible, see bottom for structure
@@ -24,16 +25,29 @@ public class Character_Movement : MonoBehaviour {
 	
 	void Update()
 	{
-		Debug.DrawRay(transform.position,transform.TransformDirection(Forward),Color.red); //shows debug of ray collision, check scene view
+		
+		
+		//Debug.DrawRay(transform.position,transform.TransformDirection(Forward),Color.red); //shows debug of ray collision, check scene view
 		Debug.DrawRay(transform.position,transform.TransformDirection(Back),Color.blue);
-		Debug.DrawRay(transform.position,transform.TransformDirection(Left),Color.green);
-		Debug.DrawRay(transform.position,transform.TransformDirection(Right),Color.green);		
-		Debug.DrawRay(transform.position,transform.TransformDirection(Up),Color.black);	
-		Debug.DrawRay(transform.position,transform.TransformDirection(Down),Color.black);	
+		//Debug.DrawRay(transform.position,transform.TransformDirection(Left),Color.green);
+		//Debug.DrawRay(transform.position,transform.TransformDirection(Right),Color.green);		
+		//Debug.DrawRay(transform.position,transform.TransformDirection(Up),Color.black);	
+		//Debug.DrawRay(transform.position,transform.TransformDirection(Down),Color.black);	
+		
+		RaycastHit down;
+		
+		//currently when going to hang off a ledge you are falling for a split second
+		//could be an issue??
+		
+		if(Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,-1,0)),out down, 1) || Hanging)
+			isFalling = false;
+		
+		else 
+			isFalling = true;	
 		
 		checkDir = timeD.direction;
 
-		if(!Hanging)
+		if(!Hanging && !isFalling)
 		{
 			Debug.DrawRay(transform.position,transform.TransformDirection(Forward),Color.red); //shows debug of ray collision, check scene view
 			if(Input.GetButton("Horizontal") && !Input.GetButton("Grab")) //checks left/right directional keys and if grab isn't pressed
@@ -132,6 +146,7 @@ public class Character_Movement : MonoBehaviour {
 	
 		public void pushStep(float dir)
 		{
+		
 			if(timeD.direction== "up" || timeD.direction== "right" )
 				if(dir>0)
 					transform.Translate(Forward);
