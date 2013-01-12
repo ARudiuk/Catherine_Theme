@@ -105,7 +105,7 @@ public class Character_Block_Move : MonoBehaviour {
 						else{
 							pushDirection = new Vector3(-1,0,0);}						
 
-						front.transform.gameObject.GetComponent<Block_Move>().move(pushDirection); //front here is the returned cube
+						front.transform.gameObject.GetComponent<Block_Move>().move(pushDirection); //front here is the returned cube, i.e. cube infront
 		
 						if(Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0,0,-1)),new Vector3(0,-1,0),1))
 							other.pushStep(test);

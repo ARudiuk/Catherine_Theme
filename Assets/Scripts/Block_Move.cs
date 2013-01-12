@@ -21,7 +21,7 @@ public class Block_Move : MonoBehaviour {
 
 		if(Physics.Raycast(transform.position,dir,out cube, 1))
 		{
-			cube.transform.gameObject.GetComponent<Block_Move>().move(dir);
+			cube.transform.gameObject.GetComponent<Block_Move>().move(dir); //calls move function recursively 
 		}
 
 		transform.Translate(dir);			
