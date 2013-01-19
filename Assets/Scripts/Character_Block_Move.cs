@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 public class Character_Block_Move : MonoBehaviour {
-	
+
 	// Use this for initialization
 	void Start () {
 
 	}
-	
+
 	public bool chosen = false;
 	bool grabbed = false;
 
@@ -15,19 +15,22 @@ public class Character_Block_Move : MonoBehaviour {
 	public Animation letGo;
 	public GameObject a;
 	public Vector3 pushDirection = new Vector3(0,0,0);
+	bool blocked;
 
 	// Update is called once per frame
 	void Update () {
-		
+		//move these to a start
 		Character_Movement other = gameObject.GetComponent<Character_Movement>();
+		Character_Movement_Ledge otherLedge = gameObject.GetComponent<Character_Movement_Ledge>();
         
-		
+
 		RaycastHit front;
 		RaycastHit left;
 		RaycastHit right;
 		RaycastHit back;
-				
-		
+		RaycastHit down;
+
+
 		if(Input.GetButton("Grab"))
 		{
 			if(!grabbed)
@@ -36,6 +39,16 @@ public class Character_Block_Move : MonoBehaviour {
 
 				grabbed = true;
 			}
+			
+			if(other.Hanging &&  Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,-1,0)),out down,1))
+				{
+					other.Hanging = false;
+					rigidbody.useGravity = true;
+					//.9 because you'll fall through in some places
+					transform.Translate(new Vector3(0,-.9f,0));
+					chosen = true;
+				}
+			
 			if(!chosen)
 			{
 				if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,-1)),out front,1))
@@ -44,9 +57,9 @@ public class Character_Block_Move : MonoBehaviour {
 						transform.Rotate(new Vector3(0,0,0));
 						chosen = true;
 					}
-					
+
 				else{
-				
+
 					if(other.timeD.direction == "right" || other.timeD.direction == "up")
 					{
 						if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(1,0,0)),out left,1))
@@ -68,7 +81,7 @@ public class Character_Block_Move : MonoBehaviour {
 							RotateTimeD("d", ref other);
 						}
 					}
-					
+
 					else //left/down
 					{
 						if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(-1,0,0)),out right,1))
@@ -77,7 +90,7 @@ public class Character_Block_Move : MonoBehaviour {
 							chosen = true;
 							RotateTimeD("r", ref other);
 						}
-					
+
 					else if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(1,0,0)),out left,1))
 						{
 							transform.Rotate(new Vector3(0,-90,0));
@@ -92,6 +105,7 @@ public class Character_Block_Move : MonoBehaviour {
 						}
 					}	
 					}
+				
 			}
 			if(Input.GetButtonDown("Horizontal"))
 			{
@@ -100,15 +114,51 @@ public class Character_Block_Move : MonoBehaviour {
 				{
 					if(other.timeD.direction == "right" || other.timeD.direction == "left") 
 					{
+						//checks if there's a block beind you
 						if(test>0){
-							pushDirection = new Vector3(1,0,0);}
+							if(other.timeD.direction == "left" && Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,0,1)),1))
+								blocked = true;
+							else
+								{
+									pushDirection = new Vector3(1,0,0);
+									blocked = false;
+								}
+							}
 						else{
-							pushDirection = new Vector3(-1,0,0);}						
-
-						front.transform.gameObject.GetComponent<Block_Move>().move(pushDirection); //front here is the returned cube
+							if(other.timeD.direction == "right" && Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,0,1)),1))
+								blocked = true;
+							else
+								{	
+									pushDirection = new Vector3(-1,0,0);
+									blocked = false;
+								}						
+							}
+						if(!blocked)
+						{
+							//front.transform.Translate(pushDirection);
+							front.transform.gameObject.GetComponent<Block_Move>().move(pushDirection); //front here is the returned cube
+							
+						//this is causing the blocks on top of you
+							if(Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0,0,-1)),new Vector3(0,-1,0),1) || (test > 0 && other.timeD.direction == "left") || (test < 0 && other.timeD.direction == "right"))
+								other.pushStep(test);
+						}
+						
+						if(Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,-1,0)),out down, 1))
+							other.isFalling = false;
 		
-						if(Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0,0,-1)),new Vector3(0,-1,0),1))
-							other.pushStep(test);
+						else 
+							other.isFalling = true;
+						
+						if(other.isFalling)
+						{
+							Debug.Log("hanging");
+							otherLedge.startHanging(ref other);
+							//this is dumb and shouldn't be necessary plese fix
+							transform.Rotate(new Vector3(0,180,0));
+							//correction factor
+							transform.Translate(0,-0.157f,0);
+							
+						}
 					}
 				}
 			}
@@ -121,29 +171,61 @@ public class Character_Block_Move : MonoBehaviour {
 					if(other.timeD.direction == "up" || other.timeD.direction == "down") 
 					{
 						if(test>0){
-							pushDirection = new Vector3(0,0,1);}
+						if(other.timeD.direction == "down" && Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,0,1)),1))
+								blocked = true;
+							else
+								{
+									pushDirection = new Vector3(0,0,1);
+									blocked = false;
+								}
+							}
 						else{
-							pushDirection = new Vector3(0,0,-1);}	
-
-
-						front.transform.gameObject.GetComponent<Block_Move>().move(pushDirection); 
-												
-						if(Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0,0,-1)),new Vector3(0,-1,0),1))
-							other.pushStep(test);
+							if(other.timeD.direction == "up" && Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,0,1)),1))
+								blocked = true;
+							else
+								{	
+									pushDirection = new Vector3(0,0,-1);
+									blocked = false;
+								}						
+							}
+						if(!blocked)
+						{
+							//front.transform.Translate(pushDirection);
+								front.transform.gameObject.GetComponent<Block_Move>().move(pushDirection); //front here is the returned cube
+						//this is causing the blocks on top of you
+							if(Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0,0,-1)),new Vector3(0,-1,0),1)|| (test > 0 && other.timeD.direction == "down") || (test < 0 && other.timeD.direction == "up")) 
+								other.pushStep(test);
+						}
+						
+						if(Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,-1,0)),out down, 1))
+							other.isFalling = false;
+		
+						else 
+							other.isFalling = true;
+						
+						if(other.isFalling)
+						{
+							Debug.Log("hanging");
+							otherLedge.startHanging(ref other);
+							//this is dumb and shouldn't be necessary plese fix
+							transform.Rotate(new Vector3(0,180,0));
+							//correction factor
+							transform.Translate(0,-0.157f,0);
+						}
 					}
 				}
 			}
 		}
-		
+
 		if(Input.GetButtonUp("Grab"))
 		{
 			chosen = false;
 			//animation.Play ("letGo");
 			grabbed = false;
 		}
-	
+
 	}
-	
+
 	void RotateTimeD(string dir, ref Character_Movement other)
 	{
 		if(dir== "l")
@@ -157,7 +239,7 @@ public class Character_Block_Move : MonoBehaviour {
 			else if(other.timeD.direction=="right")
 				other.timeD.direction="up";
 		}
-		
+
 		if(dir== "r")
 		{
 			if(other.timeD.direction=="up")
@@ -169,7 +251,7 @@ public class Character_Block_Move : MonoBehaviour {
 			else if(other.timeD.direction=="right")
 				other.timeD.direction="down";
 		}
-		
+
 		if(dir== "d")
 		{
 			if(other.timeD.direction=="up")

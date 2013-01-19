@@ -18,9 +18,24 @@ public class Character_Movement_Ledge : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {	
 		
+		//move to start
 		Character_Movement other = gameObject.GetComponent<Character_Movement>();
 		
-		if(!Physics.Raycast(transform.position,new Vector3(0,-1,0),1)&&Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,1)),1)
+		//Character_Block_Move otherBlock = gameObject.GetComponent<Character_Block_Move>();
+		
+
+			
+			/*if(Input.GetButtonDown("Grab") && other.Hanging &&  Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,-1,0)),out down,1))
+				{
+					other.Hanging = false;
+					rigidbody.useGravity = true;
+					//.9 because you'll fall through in some places
+					transform.Translate(new Vector3(0,-.9f,0));
+					otherBlock.chosen = true;
+				}*/
+		
+		
+		if(!Physics.Raycast(transform.position,new Vector3(0,-1.2f,0),1)&&Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,1)),1)
 			&& !mov.Hanging)
 		{
 			startHanging(ref other);

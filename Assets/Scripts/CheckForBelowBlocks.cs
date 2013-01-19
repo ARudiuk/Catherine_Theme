@@ -8,16 +8,11 @@ public class CheckForBelowBlocks : MonoBehaviour {
 	//this can make it ignore collisions with the character
 	// or something like if(hit.collider.gameObject.name == "cube"))
 	
+	
 	private Vector3 Down = new Vector3(0,-1,0); 
-	private Vector3 In = new Vector3(0,-1,-1);
-	private Vector3 Out = new Vector3(0,-1,1);
-	private Vector3 Left = new Vector3(-1,-1,0);
-	private Vector3 Right = new Vector3(1,-1,0);
-	RaycastHit dHit;
-	RaycastHit iHit;
-	RaycastHit oHit;
-	RaycastHit lHit;
-	RaycastHit rHit;
+
+	RaycastHit hit;
+	
 	//edge may not be 100% necessary, but it does allow you to not have to recheck a raycast collision
 	public bool edge = true; 
 	public bool supported = true;
@@ -34,42 +29,42 @@ public class CheckForBelowBlocks : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.DrawRay(transform.position,transform.TransformDirection(Down),Color.white); //shows debug of ray collision, check scene view
-		Debug.DrawRay(transform.position,transform.TransformDirection(In),Color.white);
-		Debug.DrawRay(transform.position,transform.TransformDirection(Out),Color.white);
-		Debug.DrawRay(transform.position,transform.TransformDirection(Left),Color.white);	
-		Debug.DrawRay(transform.position,transform.TransformDirection(Right),Color.white);	
 		
-		if(Physics.Raycast(transform.position,transform.TransformDirection(In), out iHit,1))
+		Debug.DrawRay(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(1,0,0)),Color.white); //shows debug of ray collision, check scene view
+		Debug.DrawRay(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(-1,0,0)),Color.white);
+		Debug.DrawRay(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(0,0,-1)),Color.white);
+		Debug.DrawRay(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(0,0,1)),Color.white);	
+		
+		if(Physics.Raycast(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(1,0,0)),out hit, 1))
 		{
-			if(iHit.collider.gameObject.name == "BasicBlock")
+			if(hit.collider.gameObject.name == "BasicBlock")
 			{
 				edge = true;
 				supported = true;	
 			}
 		}
 		
-		else if(Physics.Raycast(transform.position,transform.TransformDirection(Out), out oHit,1))
+		else if(Physics.Raycast(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(-1,0,0)),out hit, 1))
 		{
-			if(oHit.collider.gameObject.name == "BasicBlock")
+			if(hit.collider.gameObject.name == "BasicBlock")
 			{
 				edge = true;
 				supported = true;	
 			}	
 		}
 		
-		else if(Physics.Raycast(transform.position,transform.TransformDirection(Left), out lHit,1))
+		else if(Physics.Raycast(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(0,0,1)),out hit, 1))
 		{
-			if(lHit.collider.gameObject.name == "BasicBlock")
+			if(hit.collider.gameObject.name == "BasicBlock")
 			{
 				edge = true;
 				supported = true;	
 			}	
 		}
 		
-		else if(Physics.Raycast(transform.position,transform.TransformDirection(Right), out rHit,1))
+		else if(Physics.Raycast(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(0,0,-1)),out hit, 1))
 		{
-			if(rHit.collider.gameObject.name == "BasicBlock")
+			if(hit.collider.gameObject.name == "BasicBlock")
 			{
 				edge = true;
 				supported = true;	
@@ -79,9 +74,9 @@ public class CheckForBelowBlocks : MonoBehaviour {
 		else 
 			supported = false;
 		
-		if(Physics.Raycast(transform.position,transform.TransformDirection(Down), out dHit,1))
+		if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,-1,0)),out hit, 1))
 		{
-			if(dHit.collider.gameObject.name == "BasicBlock")
+			if(hit.collider.gameObject.name == "BasicBlock")
 			{
 				edge = false;
 				supported = true;	
