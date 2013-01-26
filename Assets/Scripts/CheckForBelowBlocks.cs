@@ -10,6 +10,7 @@ public class CheckForBelowBlocks : MonoBehaviour {
 	
 	
 	private Vector3 Down = new Vector3(0,-1,0); 
+	public bool debugBlock = false;
 
 	RaycastHit hit;
 	
@@ -28,14 +29,23 @@ public class CheckForBelowBlocks : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	public void BlockUpdate () {
 		
 		Debug.DrawRay(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(1,0,0)),Color.white); //shows debug of ray collision, check scene view
 		Debug.DrawRay(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(-1,0,0)),Color.white);
 		Debug.DrawRay(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(0,0,-1)),Color.white);
 		Debug.DrawRay(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(0,0,1)),Color.white);	
 		
-		if(Physics.Raycast(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(1,0,0)),out hit, 1))
+		if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,-1,0)),out hit, 1))
+		{
+			if(hit.collider.gameObject.name == "BasicBlock")
+			{
+				edge = false;
+				supported = true;	
+			}
+		}
+
+		else if(Physics.Raycast(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(1,0,0)),out hit, 1))
 		{
 			if(hit.collider.gameObject.name == "BasicBlock")
 			{
@@ -69,22 +79,14 @@ public class CheckForBelowBlocks : MonoBehaviour {
 				edge = true;
 				supported = true;	
 			}	
-		}
-		
-		else 
-			supported = false;
-		
-		if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,-1,0)),out hit, 1))
-		{
-			if(hit.collider.gameObject.name == "BasicBlock")
-			{
-				edge = false;
-				supported = true;	
-			}
-		}
+		}		
 
-		else if(!edge)
+		else 
+		{
+			if(debugBlock)
+				Debug.Log("BLOCK FALLING");
 			supported = false;
+		}
 		
 		//activate emmitter/sound if it becomes edge after not being supported OR if it loses its support from immediately below, but is still supported
 		
