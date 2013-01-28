@@ -25,7 +25,8 @@ public class Character_Movement : MonoBehaviour {
 	
 	void Update()
 	{
-		
+		if(Input.GetButtonDown("Release"))
+			Debug.Log("Release");
 		
 		//Debug.DrawRay(transform.position,transform.TransformDirection(Forward),Color.red); //shows debug of ray collision, check scene view
 		Debug.DrawRay(transform.position,transform.TransformDirection(Back),Color.blue);
@@ -38,6 +39,8 @@ public class Character_Movement : MonoBehaviour {
 		
 		//currently when going to hang off a ledge you are falling for a split second
 		//could be an issue??
+		
+		Debug.DrawRay(transform.position,transform.TransformDirection(new Vector3(0,-1,0)),Color.red);
 		
 		if(Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,-1,0)),out down, 1) || Hanging)
 			isFalling = false;

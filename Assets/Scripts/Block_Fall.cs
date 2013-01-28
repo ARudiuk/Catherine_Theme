@@ -24,6 +24,11 @@ public class Block_Fall : MonoBehaviour {
 			Vector3 end = transform.position - new Vector3(0,1,0);
 			StartCoroutine(drop(start,end,.25f));
 		}
+		
+	if(other.supported || other.edge)
+		{
+		Mathf.Round(transform.position.y);
+		}
 		//This isn't working right now??????
 
 	if(Physics.Raycast(transform.position,new Vector3(0,-1,0),out crush,.1f))

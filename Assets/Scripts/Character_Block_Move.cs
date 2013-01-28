@@ -31,7 +31,7 @@ public class Character_Block_Move : MonoBehaviour {
 		RaycastHit down;
 
 
-		if(Input.GetButton("Grab"))
+		if(Input.GetButton("Grab") && Physics.Raycast(transform.position, transform.TransformDirection(new Vector3(0,-1,0)),out down,1))
 		{
 			if(!grabbed)
 			{
@@ -47,6 +47,7 @@ public class Character_Block_Move : MonoBehaviour {
 					//.9 because you'll fall through in some places
 					transform.Translate(new Vector3(0,-.9f,0));
 					chosen = true;
+					otherLedge.YoureDefHanging = false;
 				}
 			
 			if(!chosen)
@@ -157,6 +158,7 @@ public class Character_Block_Move : MonoBehaviour {
 							transform.Rotate(new Vector3(0,180,0));
 							//correction factor
 							transform.Translate(0,-0.157f,0);
+							otherLedge.YoureDefHanging = true;
 							
 						}
 					}
@@ -211,6 +213,7 @@ public class Character_Block_Move : MonoBehaviour {
 							transform.Rotate(new Vector3(0,180,0));
 							//correction factor
 							transform.Translate(0,-0.157f,0);
+							otherLedge.YoureDefHanging = true;
 						}
 					}
 				}

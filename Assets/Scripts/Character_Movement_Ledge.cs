@@ -8,6 +8,7 @@ public class Character_Movement_Ledge : MonoBehaviour {
 	private Vector3 diagRightF = new Vector3(-1,1,-1);
 	private Vector3 diagLeftF = new Vector3(1,1,-1);
 	public float test;
+	public bool YoureDefHanging = false;
 	
 	private Character_Movement mov;
 	// Use this for initialization
@@ -35,13 +36,13 @@ public class Character_Movement_Ledge : MonoBehaviour {
 				}*/
 		
 		
-		if(!Physics.Raycast(transform.position,new Vector3(0,-1.2f,0),1)&&Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,1)),1)
+		if(!Physics.Raycast(transform.position,new Vector3(0,-1.2f,0),1) && Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,1)),1)
 			&& !mov.Hanging)
 		{
 			startHanging(ref other);
 		}		
 
-		else if(!Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,-1)),1)&& mov.Hanging)
+		else if(!Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,0,-1)),1)&& mov.Hanging && !YoureDefHanging)
 		{
 			mov.Hanging = false;
 			rigidbody.useGravity = true;
@@ -100,6 +101,7 @@ public class Character_Movement_Ledge : MonoBehaviour {
 			{
 				mov.Hanging = false;
 				rigidbody.useGravity = true;
+				YoureDefHanging = false;
 				while(!Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,-1,0)),1))
 				{
 					transform.Translate(new Vector3(0,-1f,0));
