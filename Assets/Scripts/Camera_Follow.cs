@@ -9,6 +9,9 @@ public class Camera_Follow : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		if (transform.eulerAngles.x>50f)
+			transform.Translate(new Vector3(0,6,0));		
+
 		transform.LookAt(GameObject.Find("crappy_character").transform);
 		//Camera turns 45deg around the character depending on whethere q/e are pressed
 		if(Input.GetButtonDown("Camera"))
