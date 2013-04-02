@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class levelmanager_maplevel : MonoBehaviour {
-
+	
+		
 	Vector3 right = new Vector3(1,0,0);
 	Vector3 left = new Vector3(-1,0,0);
 	Vector3 up = new Vector3(0,1,0);
@@ -25,8 +26,16 @@ public class levelmanager_maplevel : MonoBehaviour {
 	}
 	
 
-	void mapLevel()
-	{		
+	void mapLevel()//breadth first mapping of level, that goes one extra block out. Naive implementation
+	{
+		
+		Vector3[] directions = new Vector3[6]; //declare array to go through, maybe find more elegant way
+		directions[0] = right;
+		directions[1] = left;
+		directions[2] = up;
+		directions[3] = down;
+		directions[4] = forward;
+		directions[5] = back;
 
 		List<Point> reached = new List<Point>();
 		List<Point> toreach = new List<Point>();
@@ -40,7 +49,28 @@ public class levelmanager_maplevel : MonoBehaviour {
 		{
 			position = toreach[0].position;
 			occupied = toreach[0].occupied;
-
+			
+			for(int i = 0;i<6;i++) //check all 6 sides for blocks and unchecked spaces
+			{
+				if(Physics.Raycast(position,directions[i],1f))//if object in direction and it hasn't been reached or will be reached, add it to scan que
+				{
+					Point temp = new Point(position+directions[i],true);					
+					if(!reached.Contains(temp)&&!toreach.Contains(temp))
+						toreach.Add(temp);
+				}
+				
+				else if(!Physics.Raycast(position,directions[i],1f)&&occupied == true)//if no object in front and coming from occupied block, and not in either list, then add
+				{
+					Point temp = new Point(position+directions[i],false);
+					if(!reached.Contains(temp)&&!toreach.Contains(temp))
+						toreach.Add(temp);
+				}
+					
+			}
+			
+			//add to reached points, remove from points to scan
+			reached.Add(toreach[0]);
+			toreach.Remove(toreach[0]);			
 		}
 	}
 
