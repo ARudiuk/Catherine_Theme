@@ -1,7 +1,5 @@
-Catherine_Theme
+Catherine Theme
 ===============
-
-Catherine
 
 Credits
 
