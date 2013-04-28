@@ -2,45 +2,50 @@ using UnityEngine;
 using System.Collections;
 
 public class levelmanager_base : MonoBehaviour {
-
-
-	int[,,] level;
-	public int leveldim;
-	public GameObject basicBlock;
+	
+	public GameObject basicBlock;//temp public till types are implemented	
 	// Use this for initialization
 	void Awake () {
-		level = new int [leveldim,leveldim,leveldim];
-		Debug.Log("Reached");
-		for(int i = 0;i<leveldim;i++)
-		{
-			for(int j = 0;j<leveldim;j++)
-			{
-				level[i,0,j]=1;
-			}
-		}			
-		generateLevel();
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+		if(Input.GetButtonUp("OutputLevel"))
+		{
+			levelmanager_maplevel mapper = new levelmanager_maplevel();
+			mapper.mapLevel();
+		}
+		if(Input.GetButtonUp("InputLevel"))
+		{
+			Level level = new Level();
+			level.read();
+			generateLevel(level);
+		}
 	}
 
-	void generateLevel()
+	void generateLevel(Level level)
 	{
-		for (int i = 0;i<leveldim;i++)
-		{
-			for(int j = 0;j<leveldim;j++)
+		
+		for (int i = 0; i<level.Blocks.Count;i++)
+			if (level.Blocks[i].type==1)
 			{
-				for(int k=0;k<leveldim;k++)				
-				{
-					Debug.Log("Reached");
-					if (level[i,j,k]==1)
-					{
-						Instantiate(basicBlock,new Vector3(i,j,k),Quaternion.identity);	
-					}
-				}
-			}
-		}
+				Instantiate(basicBlock,level.Blocks[i].getCoordinates(),Quaternion.identity);	
+			}			
+	}
+	
+	void designPlane() //needs to be replaced
+	{		
+//		int [,,]level = new int [leveldim,leveldim,leveldim];
+//		Debug.Log("Reached");
+//		for(int i = 0;i<leveldim;i++)
+//		{
+//			for(int j = 0;j<leveldim;j++)
+//			{
+//				level[i,0,j]=1;
+//			}
+//		}			
+//		generateLevel(leveldim,level);
 	}
 }

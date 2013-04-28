@@ -26,7 +26,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 	}
 	
 
-	void mapLevel()//breadth first mapping of level, that goes one extra block out. Naive implementation
+	public void mapLevel()//breadth first mapping of level, that goes one extra block out. Naive implementation
 	{
 		
 		Vector3[] directions = new Vector3[6]; //declare array to go through, maybe find more elegant way
@@ -44,19 +44,22 @@ public class levelmanager_maplevel : MonoBehaviour {
 
 		Vector3 position;
 		bool occupied;
+		Level level = new Level();
+		Block template;
 
 		while(toreach.Count!=0)
 		{
 			position = toreach[0].position;
 			occupied = toreach[0].occupied;
+			template = new Block();
 			
 			for(int i = 0;i<6;i++) //check all 6 sides for blocks and unchecked spaces
-			{
+			{				
 				if(Physics.Raycast(position,directions[i],1f))//if object in direction and it hasn't been reached or will be reached, add it to scan que
 				{
 					Point temp = new Point(position+directions[i],true);					
 					if(!reached.Contains(temp)&&!toreach.Contains(temp))
-						toreach.Add(temp);
+						toreach.Add(temp);					
 				}
 				
 				else if(!Physics.Raycast(position,directions[i],1f)&&occupied == true)//if no object in front and coming from occupied block, and not in either list, then add
@@ -67,11 +70,19 @@ public class levelmanager_maplevel : MonoBehaviour {
 				}
 					
 			}
+			//if block then add
+			if(occupied=true)
+			{
+				template.setBlock((int)position.x,(int)position.y,(int)position.z,1);				
+				level.addBlock(template);
+			}
 			
 			//add to reached points, remove from points to scan
 			reached.Add(toreach[0]);
 			toreach.Remove(toreach[0]);			
-		}
+		}		
+		int count = level.Blocks.Count;		
+		level.write();
 	}
 
 	// Use this for initialization
