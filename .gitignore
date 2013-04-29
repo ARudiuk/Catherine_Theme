@@ -220,7 +220,6 @@ pip-log.txt
 /Library
 /Temp
 /obj
-/Assets/Levels
 
 *.pidb
 .DS_Store

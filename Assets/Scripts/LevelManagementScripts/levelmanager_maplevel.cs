@@ -26,7 +26,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 	}
 	
 
-	public void mapLevel()//breadth first mapping of level, that goes one extra block out. Naive implementation
+	public void mapLevel()//breadth first mapping of level, that goes one extra block out. Naive implementation. Need to get character away from cubes to work
 	{
 		
 		Vector3[] directions = new Vector3[6]; //declare array to go through, maybe find more elegant way
@@ -46,7 +46,8 @@ public class levelmanager_maplevel : MonoBehaviour {
 		bool occupied;
 		Level level = new Level();
 		Block template;
-
+		RaycastHit hitblock;
+		
 		while(toreach.Count!=0)
 		{
 			position = toreach[0].position;
@@ -55,11 +56,14 @@ public class levelmanager_maplevel : MonoBehaviour {
 			
 			for(int i = 0;i<6;i++) //check all 6 sides for blocks and unchecked spaces
 			{				
-				if(Physics.Raycast(position,directions[i],1f))//if object in direction and it hasn't been reached or will be reached, add it to scan que
+				if(Physics.Raycast(position,directions[i],out hitblock,1f))//if object in direction and it hasn't been reached or will be reached, add it to scan que
 				{
-					Point temp = new Point(position+directions[i],true);					
-					if(!reached.Contains(temp)&&!toreach.Contains(temp))
-						toreach.Add(temp);					
+					if(hitblock.collider.name=="BasicBlock")
+					{
+						Point temp = new Point(position+directions[i],true);					
+						if(!reached.Contains(temp)&&!toreach.Contains(temp))
+							toreach.Add(temp);		
+					}
 				}
 				
 				else if(!Physics.Raycast(position,directions[i],1f)&&occupied == true)//if no object in front and coming from occupied block, and not in either list, then add
@@ -71,7 +75,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 					
 			}
 			//if block then add
-			if(occupied=true)
+			if(occupied==true)
 			{
 				template.setBlock((int)position.x,(int)position.y,(int)position.z,1);				
 				level.addBlock(template);
