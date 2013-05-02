@@ -14,13 +14,13 @@ public class levelmanager_base : MonoBehaviour {
 		
 	}
 
-	void generateLevel(Level level)
+	protected void generateLevel(Level level)
 	{
 		
-		for (int i = 0; i<level.Blocks.Count;i++)
-			if (level.Blocks[i].type==1)
+		for (int i = 0; i<level.Objects.Count;i++)
+			if (level.Objects[i].type==states.basicblock)
 			{
-				Instantiate(basicBlock,level.Blocks[i].getCoordinates(),Quaternion.identity);	
+				Instantiate(basicBlock,level.Objects[i].getCoordinates(),Quaternion.identity);	
 			}			
 	}
 }

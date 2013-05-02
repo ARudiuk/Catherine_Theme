@@ -9,37 +9,51 @@ using System.IO; //for reading writing files
 [JsonObject(MemberSerialization.OptIn)] //says to only consider json writable/readable properties to be those with the [JsonProperty] tag
 public class Level
 {
-	private List<Block> blocks; //hold position of all blocks and type in last. Make custom class instead of Vector4 later, so we don't have to think about ints
+	[JsonProperty]
+	public List<Obj> Objects; //hold position of all blocks and type in last. Make custom class instead of Vector4 later, so we don't have to think about ints
 	private Vector3 count; //keep track of how many blocks there are in total
 	private string name; //name of level
 	
-	[JsonProperty]
-	public List<Block> Blocks {get {return blocks;}set {blocks=value;}}
-	
-	public Block[,,] map;
+	public states[,,] map;
 	
 	public Level() //just default test values for name now
 	{
-		name = "temp";
-		blocks = new List<Block>();
-		count = getSize();		
+		name = "temp"; 
+		Objects = new List<Obj>();
+		count = getSize();
+		map = new states[(int)(float)count.x,(int)(float)count.y,(int)(float)count.z];//create array for level	
+		
+		//Fill level
+		for (int i = 0;i<count.x;i++)
+		{
+			for (int j = 0;j<count.y;j++)
+			{
+				for (int k = 0;k<count.z;k++)
+				{
+					if(checkforObjects(i,j,k)!=null)
+					{
+						map[i,j,k] = checkforObjects(i,j,k).type;
+					}
+				}
+			}
+		}
 	}
 	
-	public void addBlock(Block newblock)
+	public void addObject(Obj newobject)
 	{
-		if(!blocks.Contains(newblock))
+		if(!Objects.Contains(newobject))
 		{
-			blocks.Add (newblock);
-			Debug.Log("New Blocks"+newblock.getCoordinatesasString());			
+			Objects.Add (newobject);
+			Debug.Log("New Blocks"+newobject.getCoordinatesasString());			
 		}			
 		else
-			Debug.LogError("Duplicate Blocks"+newblock.getCoordinates());
+			Debug.LogError("Duplicate Blocks"+newobject.getCoordinates());
 	}
 	
 	public Vector3 getSize()//get limits of x,y,z direction
 	{		
 		int minx=0,maxx=0,miny=0,maxy=0,minz=0,maxz=0;
-		foreach(item Block in blocks)
+		foreach(Obj item in Objects)
 		{
 			if (item.x<minx)
 				minx=item.x;
@@ -57,7 +71,7 @@ public class Level
 		
 		if(minx < 0 || miny < 0 || minz < 0) //if negative, shift blocks and rewrite
 		{
-			foreach(item Block in blocks)
+			foreach(Obj item in Objects)
 			{
 				item.x+=minx;
 				item.y+=miny;
@@ -70,14 +84,26 @@ public class Level
 		return new Vector3(maxx,maxy,maxz);
 		
 	}
-	
+					
+	public Obj checkforObjects(int x, int y, int z)
+	{
+		foreach (Obj item in Objects)
+		{
+			if (item.x==x && item.y==y && item.z==z)
+			{
+				return item;
+			}
+		}
+		return null;
+	}
+					
 	public void read()
 	{
 		Debug.Log ("reading level");
 		using(StreamReader file = new StreamReader(Application.dataPath+"/Levels/"+name+".json"))
 		{
 			string hold = file.ReadToEnd();
-			blocks = JsonConvert.DeserializeObject<List<Block>>(hold);						
+			Objects = JsonConvert.DeserializeObject<List<Obj>>(hold);						
 		}
 	}
 	
@@ -86,7 +112,7 @@ public class Level
 		Debug.Log ("writing level");
 		using (StreamWriter file = new StreamWriter(Application.dataPath+"/Levels/"+name+".json"))
 		{
-			string hold = JsonConvert.SerializeObject(blocks,Formatting.Indented); //serialize public properties and format with indentations	
+			string hold = JsonConvert.SerializeObject(Objects,Formatting.Indented); //serialize public properties and format with indentations	
 			//Debug.Log(hold);
 			file.Write(hold);
 		}
