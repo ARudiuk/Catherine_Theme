@@ -12,14 +12,17 @@ public class Level
 	[JsonProperty]
 	public List<Obj> Objects; //hold position of all blocks and type in last. Make custom class instead of Vector4 later, so we don't have to think about ints
 	private Vector3 count; //keep track of how many blocks there are in total
-	private string name; //name of level
+	private string name; //name of level	
 	
 	public states[,,] map;
+	public List<Character> characters; 
 	
 	public Level() //just default test values for name now
 	{
 		name = "temp"; 
 		Objects = new List<Obj>();
+		characters = new List<Character>();
+		characters.Add (new Character()); // fill with one character for now
 		count = getSize();
 		map = new states[(int)(float)count.x,(int)(float)count.y,(int)(float)count.z];//create array for level	
 		
