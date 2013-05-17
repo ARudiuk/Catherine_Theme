@@ -4,6 +4,7 @@ using System.Collections;
 public class levelmanager_base : MonoBehaviour {
 	
 	public GameObject basicBlock;//temp public till types are implemented
+	public GameObject crappyCharacter;//temp public till types are implemented
 	public Level currentlevel;
 	// Use this for initialization
 	void Awake () {
@@ -13,21 +14,28 @@ public class levelmanager_base : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		foreach (Character character in currentlevel.characters)
-		{
-			character.
-		}
-		
+				
 	}
 
-	protected void generateLevel(Level level)
+	protected void generateLevel()
 	{		
-		for (int i = 0; i<level.Objects.Count;i++)
-			if (level.Objects[i].type==states.basicblock)
+		for (int i = 0; i<currentlevel.Objects.Count;i++)
+		{
+			if (currentlevel.Objects[i].type==states.basicblock)
+			{				
+				currentlevel.map[currentlevel.Objects[i].x+2,currentlevel.Objects[i].y+2,currentlevel.Objects[i].z+2]=new Entity((GameObject)Instantiate(basicBlock,currentlevel.Objects[i].getCoordinates(),Quaternion.identity),states.basicblock);	
+	                                                         		}
+			if (currentlevel.Objects[i].type==states.character)
 			{
-				Instantiate(basicBlock,level.Objects[i].getCoordinates(),Quaternion.identity);	
-			}			
+				currentlevel.map[currentlevel.Objects[i].x+2,currentlevel.Objects[i].y+2,currentlevel.Objects[i].z+2]=new Entity ((GameObject)Instantiate(crappyCharacter,currentlevel.Objects[i].getCoordinates(),Quaternion.identity), states.character);	
+				Character_base temp = currentlevel.map[currentlevel.Objects[i].x+2,currentlevel.Objects[i].y+2,currentlevel.Objects[i].z+2].obj.GetComponent<Character_base>();
+				temp.level = currentlevel;
+				temp.timetoMove = 0.5f;
+			}
+		}
+	
 	}
+			
 }
 	
 	

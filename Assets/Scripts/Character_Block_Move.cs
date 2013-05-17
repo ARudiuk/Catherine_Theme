@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using System.Collections;
 
 public class Character_Block_Move : MonoBehaviour {
@@ -61,7 +61,7 @@ public class Character_Block_Move : MonoBehaviour {
 
 				else{
 
-					if(other.timeD.direction == "right" || other.timeD.direction == "up")
+					if(other.timeD.direction == Right || other.timeD.direction == Up)
 					{
 						if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(1,0,0)),out left,1))
 						{
@@ -269,3 +269,4 @@ public class Character_Block_Move : MonoBehaviour {
 	}
 
 }
+*/

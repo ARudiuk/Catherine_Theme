@@ -20,9 +20,9 @@ public class levelmanager_dev : levelmanager_base
 		}
 		if(Input.GetButtonUp("InputLevel"))
 		{
-			Level level = new Level();
-			level.read();
-			generateLevel(level);
+			currentlevel = new Level();
+			currentlevel.read();
+			generateLevel();
 		}	
 	}
 }

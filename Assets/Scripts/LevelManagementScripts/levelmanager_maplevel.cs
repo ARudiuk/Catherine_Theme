@@ -45,14 +45,14 @@ public class levelmanager_maplevel : MonoBehaviour {
 		Vector3 position;
 		bool occupied;
 		Level level = new Level();
-		Obj template;
+		Entity template;
 		RaycastHit hitblock;
 		
 		while(toreach.Count!=0)
 		{
 			position = toreach[0].position;
 			occupied = toreach[0].occupied;
-			template = new Obj();
+			template = new Entity();
 			
 			for(int i = 0;i<6;i++) //check all 6 sides for blocks and unchecked spaces
 			{				
@@ -77,15 +77,22 @@ public class levelmanager_maplevel : MonoBehaviour {
 			//if block then add
 			if(occupied==true)
 			{
-				template.setBlock((int)position.x,(int)position.y,(int)position.z,states.basicblock);				
+				template.setData((int)position.x,(int)position.y,(int)position.z,states.basicblock);				
 				level.addObject(template);
 			}
 			
 			//add to reached points, remove from points to scan
 			reached.Add(toreach[0]);
 			toreach.Remove(toreach[0]);			
-		}		
-		int count = level.Objects.Count;		
+		}
+		//TEMPORARY ADD CHARACTER IN CONSTANT PLACE
+		{
+		Entity temp = new Entity();
+		temp.setData(1,1,1,states.character);
+		level.addObject(temp);
+		}
+		
+		level.getSize();		
 		level.write();
 	}
 
