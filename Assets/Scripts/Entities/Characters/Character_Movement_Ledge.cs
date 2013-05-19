@@ -8,14 +8,19 @@ public class Character_Movement_Ledge {
 	}
 	
 	// Update is called once per frame
-	public Vector3 move (Level level, Transform transform, TimeDirection timeD) {	
+	public Vector3 move (Level level, Transform transform, TimeDirection timeD, out Vector3 rotation) {	
 		
 		//Character_Block_Move otherBlock = gameObject.GetComponent<Character_Block_Move>();
 				
 		//I broke ledge hanging I'm shit I know
 		//this input check may need fixing later when movement has been smootehr
+		
+		rotation = Vector3.zero;
+		
 		if(Input.GetButton("Grab"))
+		{			
 			return Vector3.down;
+		}
 		
 		if (Input.GetButtonDown("Horizontal"))
 			{
@@ -26,20 +31,19 @@ public class Character_Movement_Ledge {
 				
 				if(level.getEntity(transform.position,transform.TransformDirection(Vector3.right)).type==states.basicblock)
 				{
-					transform.eulerAngles = transform.TransformDirection(new Vector3(0,-90,0));
+					rotation = transform.TransformDirection(new Vector3(0,90,0))-transform.eulerAngles;
 					return Vector3.zero;
 				}
 				
 				else
 				{
-					if(level.getEntity(transform.position+transform.TransformDirection(Vector3.forward),transform.TransformDirection(Vector3.right)).type
-						==states.basicblock)
-					{
+					if(level.getEntity(transform.position+transform.TransformDirection(Vector3.forward),transform.TransformDirection(Vector3.right)).type==states.basicblock)
+					{						
 						return transform.TransformDirection(Vector3.right);
 					}
-					else
+					else if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.right)).type==states.empty)
 					{
-						transform.eulerAngles = transform.TransformDirection(new Vector3(0,90,0));
+						rotation = transform.TransformDirection(new Vector3(0,-90,0));
 						return transform.TransformDirection(Vector3.forward+Vector3.right);
 					}
 				}
@@ -51,36 +55,36 @@ public class Character_Movement_Ledge {
 				
 				if(level.getEntity(transform.position,transform.TransformDirection(Vector3.left)).type==states.basicblock)
 				{
-					transform.eulerAngles = transform.TransformDirection(new Vector3(0,90,0));
+					rotation = transform.TransformDirection(new Vector3(0,-90,0));
 					return Vector3.zero;
 				}
-				
+				 
 				else
-				{
-					if(level.getEntity(transform.position+transform.TransformDirection(Vector3.forward),transform.TransformDirection(Vector3.left)).type
-						==states.basicblock)
-					{
+				{					
+					if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.left)).type==states.basicblock)
+					{		
 						return transform.TransformDirection(Vector3.left);
 					}
-					else
+					else if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.left)).type==states.empty)
 					{
-						transform.eulerAngles = transform.TransformDirection(new Vector3(0,-90,0));
+						rotation = transform.TransformDirection(new Vector3(0,90,0));						
 						return transform.TransformDirection(Vector3.forward+Vector3.left);
 					}
 				}
 				
-			}				
+			}	
 			
 		}
 			
 		if (Input.GetButtonDown("Vertical"))
 			{
 				float test = Input.GetAxis("Vertical");
+				rotation = transform.eulerAngles;
 				if (test > 0)
 				{
 					if (level.getEntity(transform.position,Vector3.up).type==states.empty&&
 						level.getEntity(transform.position+Vector3.up,transform.TransformDirection(Vector3.forward)).type==states.empty)
-					{				
+					{					
 							return Vector3.down;							
 					}
 				}
@@ -91,7 +95,7 @@ public class Character_Movement_Ledge {
 						return Vector3.down;							
 					}
 				}
-			}
+			}		
 		return Vector3.zero;
 	}
 	

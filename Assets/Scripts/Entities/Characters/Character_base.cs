@@ -17,6 +17,8 @@ public class Character_base : MonoBehaviour
 	public bool moving;
 	public bool hanging;
 	
+	public Vector3 rotation;
+	
 	public TimeDirection timeD; // variable that holds information on what direction is faced, and how long the button for that direction was held down
 	
 	// Use this for initialization
@@ -27,6 +29,8 @@ public class Character_base : MonoBehaviour
 		moving = false;	
 		hanging = false;
 		timeD=new TimeDirection(0f,Vector3.forward);	//initializess the timeD varible, see bottom for structure
+		rotation = new Vector3(0,180,0); //makes character face forward
+		transform.eulerAngles = rotation;
 	}
 	
 	// Update is called once per frame
@@ -35,8 +39,9 @@ public class Character_base : MonoBehaviour
 		if(!moving)
 		{
 			if(hanging)
-			{
-				Vector3 move = ledge_movement.move(level, transform, timeD);
+			{				
+				Vector3 move = ledge_movement.move(level, transform, timeD, out rotation);
+ 				transform.Rotate(rotation);
 				if (move == Vector3.down)
 					hanging = false;
 				else if(move!=Vector3.zero)
@@ -48,7 +53,8 @@ public class Character_base : MonoBehaviour
 				this.hanging = hangingTest();
 				if(!hanging)
 				{					
-					Vector3 move = movement.move(level, transform,timeD);
+					Vector3 move = movement.move(level, transform,timeD, out rotation);
+					transform.Rotate(rotation);
 					if(move != Vector3.zero)
 						level.moveObject(transform.position,move);
 				}
@@ -64,7 +70,7 @@ public class Character_base : MonoBehaviour
 			{
 				if (level.getEntity(transform.position-timeD.direction,Vector3.up).type==states.empty)
 				{
-					transform.LookAt(transform.position+timeD.direction);
+					transform.LookAt(transform.position-timeD.direction);
 					return true;
 				}
 			}

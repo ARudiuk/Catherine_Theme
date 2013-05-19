@@ -18,7 +18,7 @@ public class Level
 	public Entity[,,] map; //maps out entities in the world for quick access
 	
 	public Entity getEntity(Vector3 position, Vector3 move)//simplifies retrieval of entities 
-	{
+	{		
 		return(map[(int)(position.x+move.x),(int)(position.y+move.y),(int)(position.z+move.z)]);
 	}
 	
@@ -74,9 +74,13 @@ public class Level
 	
 	public void moveObject(Vector3 position, Vector3 move)
 	{
+		Debug.Log("The initial position is " + map[(int)position.x,(int)position.y,(int)position.z].type);
+		Debug.Log("The final position is " + map[(int)position.x+(int)move.x,(int)position.y+(int)move.y,(int)position.z+(int)move.z].type);		
+		
 		Entity hold = map[(int)position.x,(int)position.y,(int)position.z];
 		map[(int)position.x,(int)position.y,(int)position.z]=new Entity(); //fix this later to not constantly be making new objects
 		map[(int)position.x+(int)move.x,(int)position.y+(int)move.y,(int)position.z+(int)move.z]=hold;	
+		
 		hold.obj.transform.position=position+move;
 	}
 	

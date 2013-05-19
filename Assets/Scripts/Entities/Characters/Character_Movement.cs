@@ -11,32 +11,32 @@ public class Character_Movement {
 	private Vector3 Down = new Vector3(0,-1,0);
 	
 	public float timetoMove; // variable to tweak how long you have to hold a direction to move
-	public float timetoFall; // variable to tweak how long it takes to fall down one level
+	public float timetoFall; // variable to tweak how long it takes to fall down one level			
+	
 
-			
-	public bool Hanging;	
-
-	public Character_Movement (float timetoMove) {
-		Hanging = false; // doesn't do normal movement if hanging
+	public Character_Movement (float timetoMove) {		
 		this.timetoMove = timetoMove;
 	}
 	
-	public Vector3 move(Level level, Transform transform, TimeDirection timeD)
+	public Vector3 move(Level level, Transform transform, TimeDirection timeD, out Vector3 rotation)
 	{		
 		//currently when going to hang off a ledge you are falling for a split second
 		//could be an issue??
 		
+		rotation = Vector3.zero;
 		if(level.getEntity(transform.position,Vector3.down).type==states.empty)
-			return Down;	
+		{			
+			return Down;
+		}
 		
 		if(Input.GetButton("Horizontal") && !Input.GetButton("Grab")) //checks left/right directional keys and if grab isn't pressed
 		{
 			float test = Input.GetAxis("Horizontal");//check if movement is along x-axis
 			if (test>0) //if right
-			{
-				transform.eulerAngles = new Vector3(0,-90,0); //turn towards right
+			{				
 				if (timeD.direction!=Right) //checks if last button was for right
 				{
+					rotation = new Vector3(0,90,0)-transform.eulerAngles; //turn towards right
 					timeD.time = 0; //resets time, and sets direction to right
 					timeD.direction = Right;
 					Debug.Log("right"); //debugs right in console
@@ -47,10 +47,10 @@ public class Character_Movement {
 				}				
 			}
 			else //same as last block, different direction
-			{
-				transform.eulerAngles = new Vector3(0,90,0);
+			{				
 				if (timeD.direction!=Left)
 				{
+					rotation = new Vector3(0,-90,0)-transform.eulerAngles;
 					timeD.time = 0;
 					timeD.direction = Left;
 					Debug.Log("left");
@@ -66,10 +66,10 @@ public class Character_Movement {
 			{
 			float test = Input.GetAxis("Vertical");//check if movement is along z-axis
 			if (test>0)
-			{
-				transform.eulerAngles = new Vector3(0,180,0);
+			{				
 				if (timeD.direction!=Forward)
 				{
+					rotation = new Vector3(0,0,0)-transform.eulerAngles;
 					timeD.time = 0;
 					timeD.direction = Forward;
 					Debug.Log("up");
@@ -80,10 +80,10 @@ public class Character_Movement {
 				}				
 			}
 			else
-			{
-				transform.eulerAngles = new Vector3(0,0,0);
+			{				
 				if (timeD.direction!=Back)
 				{
+					rotation = new Vector3(0,180,0)-transform.eulerAngles;
 					timeD.time = 0;
 					timeD.direction = Back;
 					Debug.Log("down");
@@ -96,7 +96,7 @@ public class Character_Movement {
 			
 			}
 		if(timeD.time>timetoMove)
-			{
+			{				
 				return displace(level,transform.position, timeD);
 			}
 		
@@ -104,9 +104,9 @@ public class Character_Movement {
 			timeD.time = 0f;			
 
 		if(timeD.time!=0)
-			Debug.Log(timeD.time);
+			Debug.Log(timeD.time);		
 		
-		return Vector3.zero;	
+		return Vector3.zero;		
 	}	
 
 		
