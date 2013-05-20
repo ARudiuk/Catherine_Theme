@@ -9,6 +9,7 @@ public class Character_base : MonoBehaviour
 	
 	private Character_Movement movement;
 	private Character_Movement_Ledge ledge_movement;
+	private Character_Block_Move block_movement;
 	
 	public Level level;
 	
@@ -26,6 +27,7 @@ public class Character_base : MonoBehaviour
 	{
 		movement = new Character_Movement(timetoMove);
 		ledge_movement = new Character_Movement_Ledge();
+		block_movement = new Character_Block_Move();
 		moving = false;	
 		hanging = false;
 		timeD=new TimeDirection(0f,Vector3.forward);	//initializess the timeD varible, see bottom for structure
@@ -39,26 +41,54 @@ public class Character_base : MonoBehaviour
 		if(!moving)
 		{
 			if(hanging)
-			{				
-				Vector3 move = ledge_movement.move(level, transform, timeD, out rotation);
- 				transform.Rotate(rotation);
-				if (move == Vector3.down)
-					hanging = false;
-				else if(move!=Vector3.zero)
-					level.moveObject(transform.position,move);				
-			}					
-			
-			else
-			{
-				this.hanging = hangingTest();
-				if(!hanging)
-				{					
-					Vector3 move = movement.move(level, transform,timeD, out rotation);
-					transform.Rotate(rotation);
-					if(move != Vector3.zero)
-						level.moveObject(transform.position,move);
+				{				
+					Vector3 move = ledge_movement.move(level, transform, timeD, out rotation);
+	 				transform.Rotate(rotation);
+					if (move == Vector3.down)
+					{
+						hanging = false;
+						if(level.getEntity(transform.position,Vector3.down).type==states.empty)
+							level.moveObject(transform.position,Vector3.down);
+					}
+					
+					else if(move==Vector3.up+transform.TransformDirection(Vector3.forward))
+					{
+						hanging = false;
+						level.moveObject(transform.position,move);	
+					}
+					else if(move!=Vector3.zero)
+						level.moveObject(transform.position,move);				
 				}
-			}			
+			else{
+				if(Input.GetButton("Grab"))
+				{					
+					List<Vector3> move = block_movement.move(level,transform,timeD,out rotation);
+					transform.Rotate(rotation);
+					if(move.Count != 0)
+					{
+						if(move.Count<=2)
+						{
+							level.movetwoObjects(transform.position,transform.position+transform.TransformDirection(Vector3.forward),move[1],move[0]);//move[1] is character other is block, maybe switch around to be less confusing
+							if(move[1]==Vector3.down+transform.TransformDirection(Vector3.back))
+								hanging = true;
+						}
+						else if(move.Count>2){
+							Debug.LogError("More than two movements counted");
+						}
+					}
+				}			
+				else
+				{					
+					this.hanging = hangingTest();
+					if(!hanging)
+					{					
+						Vector3 move = movement.move(level, transform,timeD, out rotation);
+						transform.Rotate(rotation);
+						if(move != Vector3.zero)
+							level.moveObject(transform.position,move);
+					}
+				}			
+			}
 		}
 	}
 	

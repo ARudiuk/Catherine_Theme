@@ -77,7 +77,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 			//if block then add
 			if(occupied==true)
 			{
-				template.setData((int)position.x,(int)position.y,(int)position.z,states.basicblock);				
+				template.setData(Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z),states.basicblock);				
 				level.addObject(template);
 			}
 			

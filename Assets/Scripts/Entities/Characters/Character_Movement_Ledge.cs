@@ -17,7 +17,7 @@ public class Character_Movement_Ledge {
 		
 		rotation = Vector3.zero;
 		
-		if(Input.GetButton("Grab"))
+		if(Input.GetButtonDown("Grab"))
 		{			
 			return Vector3.down;
 		}
@@ -85,15 +85,13 @@ public class Character_Movement_Ledge {
 					if (level.getEntity(transform.position,Vector3.up).type==states.empty&&
 						level.getEntity(transform.position+Vector3.up,transform.TransformDirection(Vector3.forward)).type==states.empty)
 					{					
-							return Vector3.down;							
+							return Vector3.up+transform.TransformDirection(Vector3.forward);							
 					}
 				}
 				else 
 				{
-					if (level.getEntity(transform.position,Vector3.down).type==states.empty)
-					{				
-						return Vector3.down;							
-					}
+					return Vector3.down;							
+					
 				}
 			}		
 		return Vector3.zero;

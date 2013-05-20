@@ -19,7 +19,7 @@ public class Level
 	
 	public Entity getEntity(Vector3 position, Vector3 move)//simplifies retrieval of entities 
 	{		
-		return(map[(int)(position.x+move.x),(int)(position.y+move.y),(int)(position.z+move.z)]);
+		return(map[Mathf.RoundToInt(position.x+move.x),Mathf.RoundToInt(position.y+move.y),Mathf.RoundToInt(position.z+move.z)]);
 	}
 	
 	//UPDATE THIS FOR STUFF OTHER THAN BASICBLOCK
@@ -74,14 +74,29 @@ public class Level
 	
 	public void moveObject(Vector3 position, Vector3 move)
 	{
-		Debug.Log("The initial position is " + map[(int)position.x,(int)position.y,(int)position.z].type);
-		Debug.Log("The final position is " + map[(int)position.x+(int)move.x,(int)position.y+(int)move.y,(int)position.z+(int)move.z].type);		
+		Debug.Log("The initial position is " + map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)].type);
+		Debug.Log("The final position is " + map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type);		
 		
-		Entity hold = map[(int)position.x,(int)position.y,(int)position.z];
-		map[(int)position.x,(int)position.y,(int)position.z]=new Entity(); //fix this later to not constantly be making new objects
-		map[(int)position.x+(int)move.x,(int)position.y+(int)move.y,(int)position.z+(int)move.z]=hold;	
+		Entity hold = map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)];		
+		map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)]=new Entity(); //fix this later to not constantly be making new objects
+		map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)]=hold;	
 		
 		hold.obj.transform.position=position+move;
+	}
+	
+	public void movetwoObjects(Vector3 position1, Vector3 position2, Vector3 move1, Vector3 move2)
+	{
+		Entity temp1 = map[Mathf.RoundToInt(position1.x),Mathf.RoundToInt(position1.y),Mathf.RoundToInt(position1.z)];
+		Entity temp2 = map[Mathf.RoundToInt(position2.x),Mathf.RoundToInt(position2.y),Mathf.RoundToInt(position2.z)];
+		
+		map[Mathf.RoundToInt(position1.x),Mathf.RoundToInt(position1.y),Mathf.RoundToInt(position1.z)] = new Entity(); //fix this later to not constantly be making new objects
+		map[Mathf.RoundToInt(position2.x),Mathf.RoundToInt(position2.y),Mathf.RoundToInt(position2.z)] = new Entity(); //fix this later to not constantly be making new objects
+		
+		map[Mathf.RoundToInt(position1.x)+Mathf.RoundToInt(move1.x),Mathf.RoundToInt(position1.y)+Mathf.RoundToInt(move1.y),Mathf.RoundToInt(position1.z)+Mathf.RoundToInt(move1.z)]=temp1;
+		map[Mathf.RoundToInt(position2.x)+Mathf.RoundToInt(move2.x),Mathf.RoundToInt(position2.y)+Mathf.RoundToInt(move2.y),Mathf.RoundToInt(position2.z)+Mathf.RoundToInt(move2.z)]=temp2;		
+		
+		temp1.obj.transform.position=position1+move1;
+		temp2.obj.transform.position=position2+move2;
 	}
 	
 	public Vector3 getSize()//get limits of x,y,z direction, and fixes position of blocks
@@ -150,7 +165,7 @@ public class Level
 			Objects = JsonConvert.DeserializeObject<List<Entity>>(hold);						
 		}
 		count = getSize(); //get size for creating array
-		map = new Entity[(int)(float)count.x+4,(int)(float)count.y+4,(int)(float)count.z+4];//create array for level
+		map = new Entity[Mathf.RoundToInt(count.x)+4,Mathf.RoundToInt(count.y)+4,Mathf.RoundToInt(count.z)+4];//create array for level
 		//Fill level with empty values
 		for (int i = 0;i<count.x+4;i++)
 		{

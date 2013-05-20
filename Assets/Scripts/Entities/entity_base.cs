@@ -25,9 +25,9 @@ public class Entity : System.IEquatable<Entity>
 	public Entity(GameObject reference, states type)
 	{
 		obj = reference;
-		x = (int) obj.transform.position.x;
-		y = (int) obj.transform.position.y;
-		z = (int) obj.transform.position.z;
+		x = Mathf.RoundToInt(obj.transform.position.x);
+		y = Mathf.RoundToInt(obj.transform.position.y);
+		z = Mathf.RoundToInt(obj.transform.position.z);
 		this.type = type;
 	}
 	
