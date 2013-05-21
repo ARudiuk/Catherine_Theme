@@ -12,12 +12,12 @@ public class Camera_Follow : MonoBehaviour {
 		if (transform.eulerAngles.x>50f)
 			transform.Translate(new Vector3(0,6,0));		
 
-		transform.LookAt(GameObject.Find("crappy_character").transform);
+		transform.LookAt(GameObject.Find("CrappyCharacter(Clone)").transform);
 		//Camera turns 45deg around the character depending on whethere q/e are pressed
 		if(Input.GetButtonDown("Camera"))
 		{
 			float test = Input.GetAxis("Camera");
-			GameObject hold = GameObject.Find("crappy_character");
+			GameObject hold = GameObject.Find("CrappyCharacter(Clone)");
 
 			if(test>0)
 			{

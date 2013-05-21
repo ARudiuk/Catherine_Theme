@@ -31,7 +31,7 @@ public class Character_Movement_Ledge {
 				
 				if(level.getEntity(transform.position,transform.TransformDirection(Vector3.right)).type==states.basicblock)
 				{
-					rotation = transform.TransformDirection(new Vector3(0,90,0))-transform.eulerAngles;
+					rotation = new Vector3(0,90,0);
 					return Vector3.zero;
 				}
 				
@@ -55,7 +55,7 @@ public class Character_Movement_Ledge {
 				
 				if(level.getEntity(transform.position,transform.TransformDirection(Vector3.left)).type==states.basicblock)
 				{
-					rotation = transform.TransformDirection(new Vector3(0,-90,0));
+					rotation = new Vector3(0,-90,0);
 					return Vector3.zero;
 				}
 				 
@@ -78,8 +78,7 @@ public class Character_Movement_Ledge {
 			
 		if (Input.GetButtonDown("Vertical"))
 			{
-				float test = Input.GetAxis("Vertical");
-				rotation = transform.eulerAngles;
+				float test = Input.GetAxis("Vertical");				
 				if (test > 0)
 				{
 					if (level.getEntity(transform.position,Vector3.up).type==states.empty&&

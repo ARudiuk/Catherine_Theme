@@ -42,8 +42,7 @@ public class Character_base : MonoBehaviour
 		{
 			if(hanging)
 				{				
-					Vector3 move = ledge_movement.move(level, transform, timeD, out rotation);
-	 				transform.Rotate(rotation);
+					Vector3 move = ledge_movement.move(level, transform, timeD, out rotation);	 				
 					if (move == Vector3.down)
 					{
 						hanging = false;
@@ -57,7 +56,8 @@ public class Character_base : MonoBehaviour
 						level.moveObject(transform.position,move);	
 					}
 					else if(move!=Vector3.zero)
-						level.moveObject(transform.position,move);				
+						level.moveObject(transform.position,move);
+					transform.Rotate(rotation);
 				}
 			else{
 				if(Input.GetButton("Grab"))
