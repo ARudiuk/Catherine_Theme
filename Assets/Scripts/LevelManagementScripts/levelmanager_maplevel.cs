@@ -52,7 +52,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 		{
 			position = toreach[0].position;
 			occupied = toreach[0].occupied;
-			template = new Entity();
+			template = new Entity(); //new Entity
 			
 			for(int i = 0;i<6;i++) //check all 6 sides for blocks and unchecked spaces
 			{				
@@ -63,6 +63,13 @@ public class levelmanager_maplevel : MonoBehaviour {
 						Point temp = new Point(position+directions[i],true);					
 						if(!reached.Contains(temp)&&!toreach.Contains(temp))
 							toreach.Add(temp);		
+					}
+					else if(hitblock.collider.name=="CrappyCharacter")
+					{						
+						Entity temp = new Entity();
+						temp.setData(Mathf.RoundToInt(position.x+directions[i].x),Mathf.RoundToInt(position.y+directions[i].y),Mathf.RoundToInt(position.z+directions[i].z),states.character);
+						if(!level.Objects.Contains(temp))
+							level.addObject(temp);		
 					}
 				}
 				
@@ -77,20 +84,14 @@ public class levelmanager_maplevel : MonoBehaviour {
 			//if block then add
 			if(occupied==true)
 			{
-				template.setData(Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z),states.basicblock);				
+				template.setData(Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z),states.basicblock);//add entity for occupied spaces				
 				level.addObject(template);
 			}
 			
 			//add to reached points, remove from points to scan
 			reached.Add(toreach[0]);
 			toreach.Remove(toreach[0]);			
-		}
-		//TEMPORARY ADD CHARACTER IN CONSTANT PLACE
-		{
-		Entity temp = new Entity();
-		temp.setData(1,1,1,states.character);
-		level.addObject(temp);
-		}
+		}		
 		
 		level.getSize();		
 		level.write();
