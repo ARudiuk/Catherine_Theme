@@ -25,7 +25,10 @@ public class levelmanager_base : MonoBehaviour {
 			{	
 				currentlevel.Objects[i].x+=2;currentlevel.Objects[i].y+=2;currentlevel.Objects[i].z+=2;
 				currentlevel.map[currentlevel.Objects[i].x,currentlevel.Objects[i].y,currentlevel.Objects[i].z]=new Entity((GameObject)Instantiate(basicBlock,currentlevel.Objects[i].getCoordinates(),Quaternion.identity),states.basicblock);	
-	                                                         		}
+	            Block_base temp = currentlevel.map[currentlevel.Objects[i].x,currentlevel.Objects[i].y,currentlevel.Objects[i].z].obj.GetComponent<Block_base>();
+				temp.level = currentlevel;
+			
+			}
 			if (currentlevel.Objects[i].type==states.character)
 			{
 				currentlevel.Objects[i].x+=2;currentlevel.Objects[i].y+=2;currentlevel.Objects[i].z+=2;

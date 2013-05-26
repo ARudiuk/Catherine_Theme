@@ -17,6 +17,15 @@ public class Level
 	
 	public Entity[,,] map; //maps out entities in the world for quick access
 	
+	public int lowestlevel;
+	
+	public Level() //just default test values for now
+	{
+		name = "temp"; 
+		Objects = new List<Entity>();
+		lowestlevel = 2;
+	}
+	
 	public Entity getEntity(Vector3 position, Vector3 move)//simplifies retrieval of entities 
 	{		
 		return(map[Mathf.RoundToInt(position.x+move.x),Mathf.RoundToInt(position.y+move.y),Mathf.RoundToInt(position.z+move.z)]);
@@ -54,12 +63,15 @@ public class Level
 		return temp;
 		
 	}
-		
-	public Level() //just default test values for name now
+	
+	public List<Entity> getsupportingEntity(Vector3 position)
 	{
-		name = "temp"; 
-		Objects = new List<Entity>();
-	}
+		List<Entity> temp = new List<Entity>();
+		if(getEntity(position,Vector3.down).type==states.basicblock)
+			temp.Add(getEntity(position,Vector3.down));
+		temp.AddRange(getsurroundingEntity(position+Vector3.down));	
+		return temp;
+	}	
 	
 	public void addObject(Entity newobject)
 	{
@@ -98,6 +110,18 @@ public class Level
 		map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)]=hold;		
 		
 		hold.obj.transform.position+=move;
+	}
+	
+	public void blockfallmoveObject(Vector3 position)
+	{
+		if(getEntity(position,Vector3.up).type==states.basicblock)
+			{
+				if(getsupportingEntity(position+Vector3.up).Count<=1)
+				{
+					blockfallmoveObject(position+Vector3.up);
+				}
+			}
+		moveObject(position,Vector3.down);
 	}
 	
 	public void movetwoObjects(Vector3 position1, Vector3 position2, Vector3 move1, Vector3 move2)
