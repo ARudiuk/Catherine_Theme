@@ -8,7 +8,7 @@ public class levelmanager_base : MonoBehaviour {
 	public Level currentlevel;
 	// Use this for initialization
 	void Awake () {
-		
+		currentlevel = new Level();
 	}
 	
 	// Update is called once per frame

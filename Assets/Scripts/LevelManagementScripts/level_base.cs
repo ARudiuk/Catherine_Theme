@@ -13,7 +13,8 @@ public class Level
 	public List<Entity> Objects; //hold position of all blocks and type in last. Make custom class instead of Vector4 later, so we don't have to think about ints
 	
 	private Vector3 count; //keep track of dimensions
-	private string name; //name of level
+	
+	public string name; //name of level
 	
 	public Entity[,,] map; //maps out entities in the world for quick access
 	
