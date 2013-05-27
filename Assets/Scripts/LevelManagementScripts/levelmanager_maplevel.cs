@@ -26,7 +26,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 	}
 	
 
-	public void mapLevel()//breadth first mapping of level, that goes one extra block out. Naive implementation. Need to get character away from cubes to work
+	public void mapLevel(string name)//breadth first mapping of level, that goes one extra block out. Naive implementation. Need to get character away from cubes to work
 	{
 		
 		Vector3[] directions = new Vector3[6]; //declare array to go through, maybe find more elegant way
@@ -44,7 +44,10 @@ public class levelmanager_maplevel : MonoBehaviour {
 
 		Vector3 position;
 		bool occupied;
+		
 		Level level = new Level();
+		
+		
 		Entity template;
 		RaycastHit hitblock;
 		
@@ -93,6 +96,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 			toreach.Remove(toreach[0]);			
 		}		
 		
+		level.name = name;
 		level.getSize();		
 		level.write();
 	}

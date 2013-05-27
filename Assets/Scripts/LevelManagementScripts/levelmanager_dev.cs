@@ -38,7 +38,7 @@ public class levelmanager_dev : levelmanager_base
 			if(Input.GetButtonDown("enter"))
 			{
 				levelmanager_maplevel mapper = new levelmanager_maplevel();
-				mapper.mapLevel();
+				mapper.mapLevel(currentlevel.name);
 				gOutputting = false;	
 			}
 		}
