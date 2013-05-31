@@ -9,6 +9,7 @@ public class levelmanager_base : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		currentlevel = new Level();
+		gameObject.AddComponent("light_manager");
 	}
 	
 	// Update is called once per frame

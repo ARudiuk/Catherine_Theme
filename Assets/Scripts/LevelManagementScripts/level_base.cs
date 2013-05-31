@@ -20,11 +20,13 @@ public class Level
 	
 	public int lowestlevel;
 	
+	
+	
 	public Level() //just default test values for now
 	{
 		name = "temp"; 
 		Objects = new List<Entity>();
-		lowestlevel = 2;
+		lowestlevel = 2;		
 	}
 	
 	public Entity getEntity(Vector3 position, Vector3 move)//simplifies retrieval of entities 
