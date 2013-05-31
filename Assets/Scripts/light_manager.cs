@@ -12,7 +12,7 @@ public class light_manager:MonoBehaviour
 		light.light.type = LightType.Spot;
 		light.light.spotAngle = 60f;
 		light.light.intensity = 4.6f;
-		light.AddComponent("light_follow");
+		light.AddComponent("follow");
 	}
 	
 	// Update is called once per frame

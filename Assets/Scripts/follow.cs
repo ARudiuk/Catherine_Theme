@@ -1,23 +1,25 @@
 using UnityEngine;
 using System.Collections;
 
-public class Camera_Follow : MonoBehaviour {	
-	
+public class follow : MonoBehaviour
+{
+
 	GameObject character;
 	public float distance;
 	public float degree;
 	void Start()
 	{	
-		distance = 12f;
-		degree = 20f;
+		distance = 7f;
+		degree = 30f;
 		character =null;
 	}
+	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+	{
 		if(character == null)
-			if(GameObject.Find ("CrappyCharacter(Clone)"))
-				character = GameObject.Find ("CrappyCharacter(Clone)");
+			if(GameObject.FindGameObjectWithTag("character"))
+				character = GameObject.FindGameObjectWithTag("character");
 
 		//Camera turns 45deg around the character depending on whethere q/e are pressed
 		if(character!=null)
@@ -26,8 +28,11 @@ public class Camera_Follow : MonoBehaviour {
 				-Mathf.Cos(degree*(Mathf.PI/180))*distance+character.transform.position.z);
 			transform.LookAt(character.transform.position);
 		}
-		
-		if(Input.GetButtonDown("Camera"))
+	}
+}
+
+/*
+  if(Input.GetButtonDown("Camera"))
 		{
 			float test = Input.GetAxis("Camera");
 			GameObject hold = GameObject.Find("CrappyCharacter(Clone)");
@@ -42,6 +47,4 @@ public class Camera_Follow : MonoBehaviour {
 				transform.RotateAround(hold.transform.position,Vector3.up,45);
 			}
 		}		
-
-	}
-}
+		*/
