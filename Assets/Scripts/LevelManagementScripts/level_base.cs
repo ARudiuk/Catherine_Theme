@@ -26,7 +26,7 @@ public class Level
 	{
 		name = "temp"; 
 		Objects = new List<Entity>();
-		lowestlevel = 2;		
+		lowestlevel = 0;		
 	}
 	
 	public Entity getEntity(Vector3 position, Vector3 move)//simplifies retrieval of entities 
@@ -184,12 +184,22 @@ public class Level
 					item.z+=(-minz);
 					maxz+=(-minz);
 				}
-			}
+			}			
 			Debug.Log("Shifting blocks in save from negative axis");
 			write ();
-		}
-		
+		}			
 		return new Vector3(maxx+1,maxy+1,maxz+1);		
+	}
+	
+	public int getlowestBlock()
+	{
+		int result=Objects[1].y;
+		foreach(Entity item in Objects)
+		{
+			if (item.y<result)
+				result = item.y;
+		}
+		return result;
 	}
 					
 	public Entity checkforObjects(int x, int y, int z)
@@ -212,7 +222,7 @@ public class Level
 			string hold = file.ReadToEnd();
 			Objects = JsonConvert.DeserializeObject<List<Entity>>(hold);						
 		}
-		count = getSize(); //get size for creating array
+		count = getSize(); //get size for creating array		
 		map = new Entity[Mathf.RoundToInt(count.x)+4,Mathf.RoundToInt(count.y)+4,Mathf.RoundToInt(count.z)+4];//create array for level
 		//Fill level with empty values
 		for (int i = 0;i<count.x+4;i++)

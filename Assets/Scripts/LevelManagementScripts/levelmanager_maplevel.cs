@@ -40,7 +40,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 		List<Point> reached = new List<Point>();
 		List<Point> toreach = new List<Point>();
 
-		toreach.Add(new Point(Vector3.zero,false));
+		toreach.Add(new Point(GameObject.FindGameObjectWithTag("block").transform.position,true));
 
 		Vector3 position;
 		bool occupied;
@@ -61,13 +61,13 @@ public class levelmanager_maplevel : MonoBehaviour {
 			{				
 				if(Physics.Raycast(position,directions[i],out hitblock,1f))//if object in direction and it hasn't been reached or will be reached, add it to scan que
 				{
-					if(hitblock.collider.name=="BasicBlock")
+					if(hitblock.collider.tag=="block")
 					{
 						Point temp = new Point(position+directions[i],true);					
 						if(!reached.Contains(temp)&&!toreach.Contains(temp))
 							toreach.Add(temp);		
 					}
-					else if(hitblock.collider.name=="CrappyCharacter")
+					else if(hitblock.collider.tag=="character")
 					{						
 						Entity temp = new Entity();
 						temp.setData(Mathf.RoundToInt(position.x+directions[i].x),Mathf.RoundToInt(position.y+directions[i].y),Mathf.RoundToInt(position.z+directions[i].z),states.character);
