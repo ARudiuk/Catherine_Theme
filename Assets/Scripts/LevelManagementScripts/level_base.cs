@@ -9,6 +9,9 @@ using System.IO; //for reading writing files
 [JsonObject(MemberSerialization.OptIn)] //says to only consider json writable/readable properties to be those with the [JsonProperty] tag
 public class Level
 {
+	public int levelwidth;
+	public int levelheight;
+	public int leveldepth;
 	[JsonProperty]
 	public List<Entity> Objects; //hold position of all blocks and type in last. Make custom class instead of Vector4 later, so we don't have to think about ints
 	
@@ -26,7 +29,8 @@ public class Level
 	{
 		name = "temp"; 
 		Objects = new List<Entity>();
-		lowestlevel = 0;		
+		lowestlevel = 0;	
+		levelwidth=0;levelheight=0;leveldepth = 0;
 	}
 	
 	public Entity getEntity(Vector3 position, Vector3 move)//simplifies retrieval of entities 
@@ -147,7 +151,7 @@ public class Level
 		temp2.obj.transform.position=position2+move2;
 	}
 	
-	public Vector3 getSize()//get limits of x,y,z direction, and fixes position of blocks
+	public void fixLimits()//get limits of x,y,z direction, and fixes position of blocks		
 	{		
 		int minx=0,maxx=0,miny=0,maxy=0,minz=0,maxz=0;
 		foreach(Entity item in Objects)
@@ -165,30 +169,46 @@ public class Level
 			else if (item.z>maxz)
 				maxz=item.z;		
 		}
-		if(minx < 0 || miny < 0 || minz < 0) //if negative, shift blocks and rewrite
+		if(minx != 0 || miny != 0 || minz != 0) //if negative, shift blocks and rewrite
 		{
 			foreach(Entity item in Objects)
 			{
-				if(minx<0)
+				if(minx!=0)
 				{
-					item.x+=(-minx);
-					maxx+=(-minx);
-				}
-				if(miny<0)
+					item.x-=(minx);					
+				}				
+				if(miny!=0)
 				{
-					item.y+=(-miny);
-					maxy+=(-miny);
-				}
-				if(minz<0)
+					item.y-=(miny);					
+				}				
+				if(minz!=0)
 				{
-					item.z+=(-minz);
-					maxz+=(-minz);
-				}
-			}			
+					item.z+=(minz);					
+				}				
+			}						
 			Debug.Log("Shifting blocks in save from negative axis");
+			levelwidth-=minx;
+			levelheight-=miny;
+			leveldepth-=minz;
 			write ();
 		}			
-		return new Vector3(maxx+1,maxy+1,maxz+1);		
+		//return new Vector3(maxx+1,maxy+1,maxz+1);		
+	}
+	
+	public void constructMatrix(int dist)//dist is the distance from the limits
+	{
+		map = new Entity[levelwidth+dist,levelheight+dist,leveldepth+dist];
+		//Fill level with empty values
+		for (int i = 0;i<levelwidth+dist*2;i++)
+		{
+			for (int j = 0;j<levelheight+dist*2;j++)
+			{
+				for (int k = 0;k<leveldepth+dist*2;k++)
+				{
+					map[i,j,k] = new Entity();
+				}
+			}
+		}
 	}
 	
 	public int getlowestBlock()
@@ -222,19 +242,9 @@ public class Level
 			string hold = file.ReadToEnd();
 			Objects = JsonConvert.DeserializeObject<List<Entity>>(hold);						
 		}
-		count = getSize(); //get size for creating array		
-		map = new Entity[Mathf.RoundToInt(count.x)+4,Mathf.RoundToInt(count.y)+4,Mathf.RoundToInt(count.z)+4];//create array for level
-		//Fill level with empty values
-		for (int i = 0;i<count.x+4;i++)
-		{
-			for (int j = 0;j<count.y+4;j++)
-			{
-				for (int k = 0;k<count.z+4;k++)
-				{
-					map[i,j,k] = new Entity();
-				}
-			}
-		}
+		fixLimits();
+		constructMatrix(3);//three away is the furthest any checks will have to go. Since you can go one block and character over.	
+		
 	}
 	
 	public void write()

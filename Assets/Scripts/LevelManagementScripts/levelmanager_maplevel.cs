@@ -97,7 +97,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 		}		
 		
 		level.name = name;
-		level.getSize();		
+		level.fixLimits();		
 		level.write();
 	}
 
