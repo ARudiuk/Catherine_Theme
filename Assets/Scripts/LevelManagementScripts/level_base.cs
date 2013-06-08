@@ -152,8 +152,9 @@ public class Level
 	}
 	
 	public void fixLimits()//get limits of x,y,z direction, and fixes position of blocks		
+		//right now this always resets the coordinates, even in right place. I find this make it more seperated, and easier to modify later
 	{		
-		int minx=0,maxx=0,miny=0,maxy=0,minz=0,maxz=0;
+		int minx=Objects[0].x,maxx=Objects[0].x,miny=Objects[0].y,maxy=Objects[0].y,minz=Objects[0].z,maxz=Objects[0].z;
 		foreach(Entity item in Objects)
 		{		
 			if (item.x<minx)
@@ -183,27 +184,26 @@ public class Level
 				}				
 				if(minz!=0)
 				{
-					item.z+=(minz);					
+					item.z-=(minz);					
 				}				
 			}						
-			Debug.Log("Shifting blocks in save from negative axis");
-			levelwidth-=minx;
-			levelheight-=miny;
-			leveldepth-=minz;
-			write ();
-		}			
+			Debug.Log("Fixing Positions");			
+		}		
+		levelwidth=maxx-minx+1;
+		levelheight=maxy-miny+1;
+		leveldepth=maxz-minz+1;
 		//return new Vector3(maxx+1,maxy+1,maxz+1);		
 	}
 	
-	public void constructMatrix(int dist)//dist is the distance from the limits
+	public void constructMatrix(int padding)//dist is the distance from the limits
 	{
-		map = new Entity[levelwidth+dist,levelheight+dist,leveldepth+dist];
+		map = new Entity[levelwidth+padding*2,levelheight+padding*2,leveldepth+padding*2];
 		//Fill level with empty values
-		for (int i = 0;i<levelwidth+dist*2;i++)
+		for (int i = 0;i<levelwidth+padding*2;i++)
 		{
-			for (int j = 0;j<levelheight+dist*2;j++)
+			for (int j = 0;j<levelheight+padding*2;j++)
 			{
-				for (int k = 0;k<leveldepth+dist*2;k++)
+				for (int k = 0;k<leveldepth+padding*2;k++)
 				{
 					map[i,j,k] = new Entity();
 				}
@@ -234,7 +234,7 @@ public class Level
 		return null;
 	}
 					
-	public void read()
+	public void read(int padding)
 	{
 		Debug.Log ("reading level");
 		using(StreamReader file = new StreamReader(Application.dataPath+"/Levels/"+name+".json"))
@@ -243,13 +243,14 @@ public class Level
 			Objects = JsonConvert.DeserializeObject<List<Entity>>(hold);						
 		}
 		fixLimits();
-		constructMatrix(3);//three away is the furthest any checks will have to go. Since you can go one block and character over.	
+		constructMatrix(padding);
 		
 	}
 	
 	public void write()
 	{
 		Debug.Log ("writing level");
+		fixLimits();
 		using (StreamWriter file = new StreamWriter(Application.dataPath+"/Levels/"+name+".json"))
 		{
 			string hold = JsonConvert.SerializeObject(Objects,Formatting.Indented); //serialize public properties and format with indentations	

@@ -34,12 +34,17 @@ public class levelmanager_dev : levelmanager_base
 				for(int i = 0; i < blockArray.Length; i++)
 				{
 					GameObject.Destroy(blockArray[i]);
-				}				
+				}
+				GameObject[] characterArray = GameObject.FindGameObjectsWithTag("character");
+				for(int i = 0; i < characterArray.Length; i++)
+				{
+					GameObject.Destroy(characterArray[i]);
+				}	
 				
 				currentlevel = new Level();
 				currentlevel.name = hold.Split('/').Last().Split('.')[0];	
 				
-				currentlevel.read();
+				currentlevel.read(levelPadding);
 				generateLevel();
 				currentlevel.lowestlevel = currentlevel.getlowestBlock();				
 			
