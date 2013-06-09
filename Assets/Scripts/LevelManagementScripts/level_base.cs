@@ -41,6 +41,20 @@ public class Level
 		return(map[Mathf.RoundToInt(position.x+move.x),Mathf.RoundToInt(position.y+move.y),Mathf.RoundToInt(position.z+move.z)]);
 	}
 	
+	public Entity getEntity(Vector3 position)//simplifies retrieval of entities 
+	{		
+		return(map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)]);
+	}
+	
+	public void setMap(Vector3 position,Entity entity)
+	{
+		map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)]=entity;
+	}
+	
+	public void setMap(Vector3 position,Vector3 move,Entity entity)
+	{
+		map[Mathf.RoundToInt(position.x+move.x),Mathf.RoundToInt(position.y+move.y),Mathf.RoundToInt(position.z+move.z)]=entity;
+	}
 	//UPDATE THIS FOR STUFF OTHER THAN block
 	public List<Entity> getsurroundingEntity(Vector3 position)
 	{
@@ -96,28 +110,28 @@ public class Level
 	
 	public void moveObject(Vector3 position, Vector3 move, Vector3 rotation)
 	{
-		Debug.Log("The initial position is " + map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)].type);
-		Debug.Log("The final position is " + map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type);		
+		Debug.Log("The initial position is " + getEntity(position).type);
+		Debug.Log("The final position is " + getEntity(position,move).type);		
 		
-		Entity hold = map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)];
-		map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)]= new Entity();
-		if(map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type==states.block)
+		Entity hold = getEntity(position);
+		setMap(position,new Entity());
+		if(getEntity(position,move).type==states.block)
 		{
 			moveObject(position+move,move,rotation);
 		}		 
-		map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)]=hold;		
+		setMap(position,move,hold);		
 		
 		animate (hold,0.15f,move,rotation);//make it unable to move during animation
 	}
 	
 	public void chainmoveObject(Vector3 position, Vector3 move, Vector3 rotation)
 	{
-		Entity hold = map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)];
-		if(map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type==states.block)
+		Entity hold = getEntity(position);
+		if(getEntity(position,move).type==states.block)
 		{
 			chainmoveObject(position+move,move,rotation);
-		}	
-		map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)]=hold;		
+		}
+		setMap(position,move,hold);			
 		
 		animate (hold,0.15f,move,rotation);
 	}
@@ -136,19 +150,19 @@ public class Level
 	
 	public void movetwoObjects(Vector3 position1, Vector3 position2, Vector3 move1, Vector3 move2, Vector3 rotation1, Vector3 rotation2)
 	{
-		Entity temp1 = map[Mathf.RoundToInt(position1.x),Mathf.RoundToInt(position1.y),Mathf.RoundToInt(position1.z)];
-		Entity temp2 = map[Mathf.RoundToInt(position2.x),Mathf.RoundToInt(position2.y),Mathf.RoundToInt(position2.z)];
+		Entity temp1 = getEntity(position1);
+		Entity temp2 = getEntity(position2);
 		
 		if(getEntity(position2,move2).type==states.block)
 		{
 			chainmoveObject(position2+move2,move2,rotation2);
 		}
 		
-		map[Mathf.RoundToInt(position1.x),Mathf.RoundToInt(position1.y),Mathf.RoundToInt(position1.z)] = new Entity(); //fix this later to not constantly be making new objects
-		map[Mathf.RoundToInt(position2.x),Mathf.RoundToInt(position2.y),Mathf.RoundToInt(position2.z)] = new Entity(); //fix this later to not constantly be making new objects
+		setMap(position1,new Entity());//fix this later to not constantly be making new objects
+		setMap(position2,new Entity());//fix this later to not constantly be making new objects
 		
-		map[Mathf.RoundToInt(position1.x)+Mathf.RoundToInt(move1.x),Mathf.RoundToInt(position1.y)+Mathf.RoundToInt(move1.y),Mathf.RoundToInt(position1.z)+Mathf.RoundToInt(move1.z)]=temp1;
-		map[Mathf.RoundToInt(position2.x)+Mathf.RoundToInt(move2.x),Mathf.RoundToInt(position2.y)+Mathf.RoundToInt(move2.y),Mathf.RoundToInt(position2.z)+Mathf.RoundToInt(move2.z)]=temp2;		
+		setMap(position1,move1,temp1);
+		setMap(position2,move2,temp2);
 		
 		animate (temp1,0.15f,move1,rotation1);
 		animate (temp2,0.15f,move2,rotation2);		
