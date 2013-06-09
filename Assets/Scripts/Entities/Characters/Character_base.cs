@@ -132,7 +132,8 @@ public class Character_base : MonoBehaviour
 			{
 				transform.position = Vector3.Lerp(initial, final, t/duration);	
 				yield return null;
-			}		
+			}	
+		transform.position = final; //bad  hack to fix animation not being perfect
 	}
 }
 
