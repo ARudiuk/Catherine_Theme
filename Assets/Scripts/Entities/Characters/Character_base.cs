@@ -38,8 +38,9 @@ public class Character_base : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{		
+		moving = level.getEntity(transform.position,Vector3.zero).moving;
 		if(!moving)
-		{
+		{			
 			if(hanging)
 				{				
 					Vector3 move = ledge_movement.move(level, transform, timeD, out rotation);	 				
@@ -47,16 +48,16 @@ public class Character_base : MonoBehaviour
 					{
 						hanging = false;
 						if(level.getEntity(transform.position,Vector3.down).type==states.empty)
-							level.moveObject(transform.position,Vector3.down);
+							level.moveObject(transform.position,Vector3.down, rotation);
 					}
 					
 					else if(move==Vector3.up+transform.TransformDirection(Vector3.forward))
 					{
 						hanging = false;
-						level.moveObject(transform.position,move);	
+						level.moveObject(transform.position,move, rotation);	
 					}
 					else if(move!=Vector3.zero)
-						level.moveObject(transform.position,move);
+						level.moveObject(transform.position,move, rotation);
 					transform.Rotate(rotation);
 				}
 			else{
@@ -68,7 +69,7 @@ public class Character_base : MonoBehaviour
 					{
 						if(move.Count<=2)
 						{
-							level.movetwoObjects(transform.position,transform.position+transform.TransformDirection(Vector3.forward),move[1],move[0]);//move[1] is character other is block, maybe switch around to be less confusing
+							level.movetwoObjects(transform.position,transform.position+transform.TransformDirection(Vector3.forward),move[1],move[0],Vector3.zero,Vector3.zero);//move[1] is character other is block, maybe switch around to be less confusing
 							if(move[1]==Vector3.down+transform.TransformDirection(Vector3.back))
 								hanging = true;
 						}
@@ -86,8 +87,7 @@ public class Character_base : MonoBehaviour
 						transform.Rotate(rotation);
 						if(move != Vector3.zero)
 						{
-							level.moveObject(transform.position,move);
-							StartCoroutine(animate (0.5f,move));//make it unable to move during animation
+							level.moveObject(transform.position,move, rotation);							
 						}
 					}
 				}			
@@ -122,18 +122,6 @@ public class Character_base : MonoBehaviour
 			}
 		}
 		return false;
-	}
-	
-	public IEnumerator animate(float duration,Vector3 move)
-	{
-		Vector3 initial = transform.position;
-		Vector3 final = transform.position+move;
-		for(float t = 0; t < duration; t += Time.deltaTime)
-			{
-				transform.position = Vector3.Lerp(initial, final, t/duration);	
-				yield return null;
-			}	
-		transform.position = final; //bad  hack to fix animation not being perfect
-	}
+	}	
 }
 

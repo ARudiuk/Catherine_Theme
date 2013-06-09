@@ -16,8 +16,11 @@ public class Entity : System.IEquatable<Entity>
 	
 	public GameObject obj;
 	
+	public bool moving;
+	
 	public Entity()
 	{
+		moving = false;
 		obj = null;
 		this.type=states.empty;
 	}

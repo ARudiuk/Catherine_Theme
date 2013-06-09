@@ -91,7 +91,7 @@ public class Level
 			Debug.LogError("Duplicate Blocks"+newobject.getCoordinates());
 	}
 	
-	public void moveObject(Vector3 position, Vector3 move)
+	public void moveObject(Vector3 position, Vector3 move, Vector3 rotation)
 	{
 		Debug.Log("The initial position is " + map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)].type);
 		Debug.Log("The final position is " + map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type);		
@@ -100,21 +100,23 @@ public class Level
 		map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)]= new Entity();
 		if(map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type==states.basicblock)
 		{
-			moveObject(position+move,move);
+			moveObject(position+move,move,rotation);
 		}		 
 		map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)]=hold;		
+		
+		animate (hold,0.2f,move,rotation);//make it unable to move during animation
 	}
 	
-	public void chainmoveObject(Vector3 position, Vector3 move)
+	public void chainmoveObject(Vector3 position, Vector3 move, Vector3 rotation)
 	{
 		Entity hold = map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)];
 		if(map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type==states.basicblock)
 		{
-			chainmoveObject(position+move,move);
+			chainmoveObject(position+move,move,rotation);
 		}	
 		map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)]=hold;		
 		
-		hold.obj.transform.position+=move;
+		animate (hold,0.2f,move,rotation);
 	}
 	
 	public void blockfallmoveObject(Vector3 position)
@@ -126,17 +128,17 @@ public class Level
 					blockfallmoveObject(position+Vector3.up);
 				}
 			}
-		moveObject(position,Vector3.down);
+		moveObject(position,Vector3.down, Vector3.zero);
 	}
 	
-	public void movetwoObjects(Vector3 position1, Vector3 position2, Vector3 move1, Vector3 move2)
+	public void movetwoObjects(Vector3 position1, Vector3 position2, Vector3 move1, Vector3 move2, Vector3 rotation1, Vector3 rotation2)
 	{
 		Entity temp1 = map[Mathf.RoundToInt(position1.x),Mathf.RoundToInt(position1.y),Mathf.RoundToInt(position1.z)];
 		Entity temp2 = map[Mathf.RoundToInt(position2.x),Mathf.RoundToInt(position2.y),Mathf.RoundToInt(position2.z)];
 		
 		if(getEntity(position2,move2).type==states.basicblock)
 		{
-			chainmoveObject(position2+move2,move2);
+			chainmoveObject(position2+move2,move2,rotation2);
 		}
 		
 		map[Mathf.RoundToInt(position1.x),Mathf.RoundToInt(position1.y),Mathf.RoundToInt(position1.z)] = new Entity(); //fix this later to not constantly be making new objects
@@ -145,8 +147,8 @@ public class Level
 		map[Mathf.RoundToInt(position1.x)+Mathf.RoundToInt(move1.x),Mathf.RoundToInt(position1.y)+Mathf.RoundToInt(move1.y),Mathf.RoundToInt(position1.z)+Mathf.RoundToInt(move1.z)]=temp1;
 		map[Mathf.RoundToInt(position2.x)+Mathf.RoundToInt(move2.x),Mathf.RoundToInt(position2.y)+Mathf.RoundToInt(move2.y),Mathf.RoundToInt(position2.z)+Mathf.RoundToInt(move2.z)]=temp2;		
 		
-		temp1.obj.transform.position=position1+move1;
-		temp2.obj.transform.position=position2+move2;
+		animate (temp1,0.2f,move1,rotation1);
+		animate (temp2,0.2f,move2,rotation2);		
 	}
 	
 	public void fixLimits()//get limits of x,y,z direction, and fixes position of blocks		
@@ -255,6 +257,33 @@ public class Level
 			//Debug.Log(hold);
 			file.Write(hold);
 		}
+	}
+	
+	public void animate(Entity entity, float duration,Vector3 move, Vector3 rotation)
+	{
+		Vector3 initial = entity.obj.transform.position;
+		Vector3 final = initial+move;
+		
+		if (entity.type == states.character)
+		{
+			entity.obj.GetComponent<Character_base>().StartCoroutine(animation(entity,duration,initial,final,Vector3.zero,Vector3.zero));
+		}
+		if (entity.type == states.basicblock)
+		{
+			entity.obj.GetComponent<Block_base>().StartCoroutine(animation(entity,duration,initial,final,Vector3.zero,Vector3.zero));
+		}
+	}
+	
+	public IEnumerator animation(Entity entity, float duration, Vector3 start, Vector3 end, Vector3 initialrotation, Vector3 finalrotation)
+	{
+		entity.moving=true;
+		for(float t = 0; t < duration; t += Time.deltaTime)
+			{
+				entity.obj.transform.position = Vector3.Lerp(start, end, t/duration);	
+				yield return null;
+			}
+		entity.obj.transform.position = end; //bad  hack to fix animation not being perfect
+		entity.moving = false;
 	}
 		
 }
