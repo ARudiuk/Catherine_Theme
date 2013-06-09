@@ -19,7 +19,7 @@ public class Character_Block_Move {
 		List <Vector3> movement = new List<Vector3>(); //might not want to return empty objects this often
 		//move these to a start
 		rotation = Vector3.zero;
-		if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)).type==states.basicblock)
+		if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)).type==states.block)
 		{
 			grabbing = true;
 		}
@@ -29,7 +29,7 @@ public class Character_Block_Move {
 			{
 				foreach(Entity entity in temp)
 				{
-					if(entity.type==states.basicblock)
+					if(entity.type==states.block)
 					{
 						grabbing = true;
 						rotation = new Vector3(0,Vector3.Angle(entity.obj.transform.position-transform.position,transform.TransformDirection(Vector3.forward)),0);
@@ -89,7 +89,7 @@ public class Character_Block_Move {
 		movement.Add (movement[0]);
 		if(transform.TransformDirection(Vector3.back)==movement[0])
 		{
-			if(level.getEntity(transform.position,transform.TransformDirection(Vector3.back)).type==states.basicblock)
+			if(level.getEntity(transform.position,transform.TransformDirection(Vector3.back)).type==states.block)
 			{
 				return new List<Vector3>();
 			}

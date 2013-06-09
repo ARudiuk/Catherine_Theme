@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using Newtonsoft.Json; //external json library
+using System.IO; //for reading writing files
 
 public class levelmanager_base : MonoBehaviour {
 	
-	public GameObject basicBlock;//temp public till types are implemented
+	public GameObject block;//temp public till types are implemented
 	public GameObject crappyCharacter;//temp public till types are implemented
 	public Level currentlevel;	
 	
@@ -25,10 +27,10 @@ public class levelmanager_base : MonoBehaviour {
 	{		
 		for (int i = 0; i<currentlevel.Objects.Count;i++)
 		{
-			if (currentlevel.Objects[i].type==states.basicblock)
+			if (currentlevel.Objects[i].type==states.block)
 			{	
 				currentlevel.Objects[i].x+=levelPadding;currentlevel.Objects[i].y+=levelPadding;currentlevel.Objects[i].z+=levelPadding;
-				currentlevel.map[currentlevel.Objects[i].x,currentlevel.Objects[i].y,currentlevel.Objects[i].z]=new Entity((GameObject)Instantiate(basicBlock,currentlevel.Objects[i].getCoordinates(),Quaternion.identity),states.basicblock);	
+				currentlevel.map[currentlevel.Objects[i].x,currentlevel.Objects[i].y,currentlevel.Objects[i].z]=new Entity((GameObject)Instantiate(block,currentlevel.Objects[i].getCoordinates(),Quaternion.identity),states.block,(int) blocktypes.basic);	
 	            Block_base temp = currentlevel.map[currentlevel.Objects[i].x,currentlevel.Objects[i].y,currentlevel.Objects[i].z].obj.GetComponent<Block_base>();
 				temp.level = currentlevel;
 			
@@ -36,13 +38,39 @@ public class levelmanager_base : MonoBehaviour {
 			if (currentlevel.Objects[i].type==states.character)
 			{
 				currentlevel.Objects[i].x+=levelPadding;currentlevel.Objects[i].y+=levelPadding;currentlevel.Objects[i].z+=levelPadding;
-				currentlevel.map[currentlevel.Objects[i].x,currentlevel.Objects[i].y,currentlevel.Objects[i].z]=new Entity ((GameObject)Instantiate(crappyCharacter,currentlevel.Objects[i].getCoordinates(),Quaternion.identity), states.character);	
+				currentlevel.map[currentlevel.Objects[i].x,currentlevel.Objects[i].y,currentlevel.Objects[i].z]=new Entity ((GameObject)Instantiate(crappyCharacter,currentlevel.Objects[i].getCoordinates(),Quaternion.identity), states.character, (int)charactertypes.basic);	
 				Character_base temp = currentlevel.map[currentlevel.Objects[i].x,currentlevel.Objects[i].y,currentlevel.Objects[i].z].obj.GetComponent<Character_base>();
 				temp.level = currentlevel;				
 			}
 		}
 	
 	}
+	
+	protected void read(int padding)
+	{	
+		Debug.Log ("reading level");
+		using(StreamReader file = new StreamReader(Application.dataPath+"/Levels/"+currentlevel.name+".json"))
+		{
+			string hold = file.ReadToEnd();
+			currentlevel = JsonConvert.DeserializeObject<Level>(hold);						
+		}
+		currentlevel.fixLimits();
+		currentlevel.constructMatrix(padding);
+		
+	}
+	
+	protected void write()
+	{
+		Debug.Log ("writing level");
+		currentlevel.fixLimits();
+		using (StreamWriter file = new StreamWriter(Application.dataPath+"/Levels/"+currentlevel.name+".json"))
+		{
+			string hold = JsonConvert.SerializeObject(currentlevel,Formatting.Indented); //serialize public properties and format with indentations	
+			//Debug.Log(hold);
+			file.Write(hold);
+		}
+	}
+	
 			
 }
 	

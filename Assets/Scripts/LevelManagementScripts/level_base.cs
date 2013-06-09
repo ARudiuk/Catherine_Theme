@@ -9,8 +9,11 @@ using System.IO; //for reading writing files
 [JsonObject(MemberSerialization.OptIn)] //says to only consider json writable/readable properties to be those with the [JsonProperty] tag
 public class Level
 {
+	[JsonProperty]
 	public int levelwidth;
+	[JsonProperty]
 	public int levelheight;
+	[JsonProperty]
 	public int leveldepth;
 	[JsonProperty]
 	public List<Entity> Objects; //hold position of all blocks and type in last. Make custom class instead of Vector4 later, so we don't have to think about ints
@@ -38,7 +41,7 @@ public class Level
 		return(map[Mathf.RoundToInt(position.x+move.x),Mathf.RoundToInt(position.y+move.y),Mathf.RoundToInt(position.z+move.z)]);
 	}
 	
-	//UPDATE THIS FOR STUFF OTHER THAN BASICBLOCK
+	//UPDATE THIS FOR STUFF OTHER THAN block
 	public List<Entity> getsurroundingEntity(Vector3 position)
 	{
 		List<Entity> temp = new List<Entity>();
@@ -46,25 +49,25 @@ public class Level
 		test = getEntity (position,Vector3.forward);
 		if(test!=null)
 		{
-			if(test.type == states.basicblock)
+			if(test.type == states.block)
 				temp.Add (test);
 		}
 		test = getEntity (position,Vector3.back);
 		if(test!=null)
 		{
-			if(test.type == states.basicblock)
+			if(test.type == states.block)
 				temp.Add (test);
 		}
 		test = getEntity (position,Vector3.right);
 		if(test!=null)
 		{
-			if(test.type == states.basicblock)
+			if(test.type == states.block)
 				temp.Add (test);
 		}
 		test = getEntity (position,Vector3.left);
 		if(test!=null)
 		{
-			if(test.type == states.basicblock)
+			if(test.type == states.block)
 				temp.Add (test);
 		}
 		return temp;
@@ -74,7 +77,7 @@ public class Level
 	public List<Entity> getsupportingEntity(Vector3 position)
 	{
 		List<Entity> temp = new List<Entity>();
-		if(getEntity(position,Vector3.down).type==states.basicblock)
+		if(getEntity(position,Vector3.down).type==states.block)
 			temp.Add(getEntity(position,Vector3.down));
 		temp.AddRange(getsurroundingEntity(position+Vector3.down));	
 		return temp;
@@ -98,7 +101,7 @@ public class Level
 		
 		Entity hold = map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)];
 		map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)]= new Entity();
-		if(map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type==states.basicblock)
+		if(map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type==states.block)
 		{
 			moveObject(position+move,move,rotation);
 		}		 
@@ -110,7 +113,7 @@ public class Level
 	public void chainmoveObject(Vector3 position, Vector3 move, Vector3 rotation)
 	{
 		Entity hold = map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)];
-		if(map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type==states.basicblock)
+		if(map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)].type==states.block)
 		{
 			chainmoveObject(position+move,move,rotation);
 		}	
@@ -121,7 +124,7 @@ public class Level
 	
 	public void blockfallmoveObject(Vector3 position)
 	{
-		if(getEntity(position,Vector3.up).type==states.basicblock)
+		if(getEntity(position,Vector3.up).type==states.block)
 			{
 				if(getsupportingEntity(position+Vector3.up).Count<=1)
 				{
@@ -136,7 +139,7 @@ public class Level
 		Entity temp1 = map[Mathf.RoundToInt(position1.x),Mathf.RoundToInt(position1.y),Mathf.RoundToInt(position1.z)];
 		Entity temp2 = map[Mathf.RoundToInt(position2.x),Mathf.RoundToInt(position2.y),Mathf.RoundToInt(position2.z)];
 		
-		if(getEntity(position2,move2).type==states.basicblock)
+		if(getEntity(position2,move2).type==states.block)
 		{
 			chainmoveObject(position2+move2,move2,rotation2);
 		}
@@ -232,32 +235,7 @@ public class Level
 			}
 		}
 		return null;
-	}
-					
-	public void read(int padding)
-	{
-		Debug.Log ("reading level");
-		using(StreamReader file = new StreamReader(Application.dataPath+"/Levels/"+name+".json"))
-		{
-			string hold = file.ReadToEnd();
-			Objects = JsonConvert.DeserializeObject<List<Entity>>(hold);						
-		}
-		fixLimits();
-		constructMatrix(padding);
-		
-	}
-	
-	public void write()
-	{
-		Debug.Log ("writing level");
-		fixLimits();
-		using (StreamWriter file = new StreamWriter(Application.dataPath+"/Levels/"+name+".json"))
-		{
-			string hold = JsonConvert.SerializeObject(Objects,Formatting.Indented); //serialize public properties and format with indentations	
-			//Debug.Log(hold);
-			file.Write(hold);
-		}
-	}
+	}					
 	
 	public void animate(Entity entity, float duration,Vector3 move, Vector3 rotation)
 	{
@@ -268,7 +246,7 @@ public class Level
 		{
 			entity.obj.GetComponent<Character_base>().StartCoroutine(animation(entity,duration,initial,final,Vector3.zero,Vector3.zero));
 		}
-		if (entity.type == states.basicblock)
+		if (entity.type == states.block)
 		{
 			entity.obj.GetComponent<Block_base>().StartCoroutine(animation(entity,duration,initial,final,Vector3.zero,Vector3.zero));
 		}

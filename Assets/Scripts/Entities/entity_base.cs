@@ -13,6 +13,8 @@ public class Entity : System.IEquatable<Entity>
 	public int z;
 	[JsonProperty]
 	public states type;
+	[JsonProperty]
+	public int subtype;
 	
 	public GameObject obj;
 	
@@ -23,15 +25,17 @@ public class Entity : System.IEquatable<Entity>
 		moving = false;
 		obj = null;
 		this.type=states.empty;
+		this.subtype=0;
 	}
 	
-	public Entity(GameObject reference, states type)
+	public Entity(GameObject reference, states type, int subtype)
 	{
 		obj = reference;
 		x = Mathf.RoundToInt(obj.transform.position.x);
 		y = Mathf.RoundToInt(obj.transform.position.y);
 		z = Mathf.RoundToInt(obj.transform.position.z);
 		this.type = type;
+		this.subtype = subtype;
 	}
 	
 	public bool Equals(Entity other)
@@ -50,12 +54,13 @@ public class Entity : System.IEquatable<Entity>
 		return new Vector3(x,y,z);
 	}
 	
-	public void setData(int x, int y, int z, states type)
+	public void setData(int x, int y, int z, states type, int subtype)
 	{
 		this.x=x;
 		this.y=y;
 		this.z=z;
 		this.type=type;
+		this.subtype=subtype;
 	}
 	
 }

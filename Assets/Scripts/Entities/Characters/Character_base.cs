@@ -100,7 +100,7 @@ public class Character_base : MonoBehaviour
 	{
 		if (level.getEntity(transform.position,Vector3.down).type==states.empty)
 		{			
-			if(level.getEntity(transform.position,-timeD.direction).type==states.basicblock)
+			if(level.getEntity(transform.position,-timeD.direction).type==states.block)
 			{
 				if (level.getEntity(transform.position-timeD.direction,Vector3.up).type==states.empty)
 				{

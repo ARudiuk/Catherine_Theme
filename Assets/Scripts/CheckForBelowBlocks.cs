@@ -38,7 +38,7 @@ public class CheckForBelowBlocks : MonoBehaviour {
 		
 		if(Physics.Raycast(transform.position,transform.TransformDirection(new Vector3(0,-1,0)),out hit, 1))
 		{
-			if(hit.collider.gameObject.name == "BasicBlock")
+			if(hit.collider.gameObject.name == "block")
 			{
 				edge = false;
 				supported = true;	
@@ -47,7 +47,7 @@ public class CheckForBelowBlocks : MonoBehaviour {
 
 		else if(Physics.Raycast(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(1,0,0)),out hit, 1))
 		{
-			if(hit.collider.gameObject.name == "BasicBlock")
+			if(hit.collider.gameObject.name == "block")
 			{
 				edge = true;
 				supported = true;	
@@ -56,7 +56,7 @@ public class CheckForBelowBlocks : MonoBehaviour {
 		
 		else if(Physics.Raycast(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(-1,0,0)),out hit, 1))
 		{
-			if(hit.collider.gameObject.name == "BasicBlock")
+			if(hit.collider.gameObject.name == "block")
 			{
 				edge = true;
 				supported = true;	
@@ -65,7 +65,7 @@ public class CheckForBelowBlocks : MonoBehaviour {
 		
 		else if(Physics.Raycast(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(0,0,1)),out hit, 1))
 		{
-			if(hit.collider.gameObject.name == "BasicBlock")
+			if(hit.collider.gameObject.name == "block")
 			{
 				edge = true;
 				supported = true;	
@@ -74,7 +74,7 @@ public class CheckForBelowBlocks : MonoBehaviour {
 		
 		else if(Physics.Raycast(transform.position + new Vector3(0,-1,0),transform.TransformDirection(new Vector3(0,0,-1)),out hit, 1))
 		{
-			if(hit.collider.gameObject.name == "BasicBlock")
+			if(hit.collider.gameObject.name == "block")
 			{
 				edge = true;
 				supported = true;	

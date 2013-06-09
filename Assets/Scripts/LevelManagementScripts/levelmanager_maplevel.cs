@@ -26,7 +26,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 	}
 	
 
-	public void mapLevel(string name)//breadth first mapping of level, that goes one extra block out. Naive implementation. Need to get character away from cubes to work
+	public Level mapLevel(string name)//breadth first mapping of level, that goes one extra block out. Naive implementation. Need to get character away from cubes to work
 	{
 		
 		Vector3[] directions = new Vector3[6]; //declare array to go through, maybe find more elegant way
@@ -70,7 +70,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 					else if(hitblock.collider.tag=="character")
 					{						
 						Entity temp = new Entity();
-						temp.setData(Mathf.RoundToInt(position.x+directions[i].x),Mathf.RoundToInt(position.y+directions[i].y),Mathf.RoundToInt(position.z+directions[i].z),states.character);
+						temp.setData(Mathf.RoundToInt(position.x+directions[i].x),Mathf.RoundToInt(position.y+directions[i].y),Mathf.RoundToInt(position.z+directions[i].z),states.character,(int) charactertypes.basic);
 						if(!level.Objects.Contains(temp))
 							level.addObject(temp);		
 					}
@@ -87,7 +87,7 @@ public class levelmanager_maplevel : MonoBehaviour {
 			//if block then add
 			if(occupied==true)
 			{
-				template.setData(Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z),states.basicblock);//add entity for occupied spaces				
+				template.setData(Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z),states.block,(int) blocktypes.basic);//add entity for occupied spaces				
 				level.addObject(template);
 			}
 			
@@ -97,8 +97,8 @@ public class levelmanager_maplevel : MonoBehaviour {
 		}		
 		
 		level.name = name;
-		level.fixLimits();		
-		level.write();
+		level.fixLimits();
+		return level;
 	}
 
 	// Use this for initialization

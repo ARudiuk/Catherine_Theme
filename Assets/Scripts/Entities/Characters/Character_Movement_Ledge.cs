@@ -29,7 +29,7 @@ public class Character_Movement_Ledge {
 			if(test>0)
 			{
 				
-				if(level.getEntity(transform.position,transform.TransformDirection(Vector3.right)).type==states.basicblock)
+				if(level.getEntity(transform.position,transform.TransformDirection(Vector3.right)).type==states.block)
 				{
 					rotation = new Vector3(0,90,0);
 					return Vector3.zero;
@@ -37,7 +37,7 @@ public class Character_Movement_Ledge {
 				
 				else
 				{
-					if(level.getEntity(transform.position+transform.TransformDirection(Vector3.forward),transform.TransformDirection(Vector3.right)).type==states.basicblock
+					if(level.getEntity(transform.position+transform.TransformDirection(Vector3.forward),transform.TransformDirection(Vector3.right)).type==states.block
 						&& level.getEntity(transform.position,Vector3.up+transform.TransformDirection(Vector3.right)).type==states.empty)
 					{						
 						return transform.TransformDirection(Vector3.right);
@@ -55,7 +55,7 @@ public class Character_Movement_Ledge {
 			else
 			{
 				
-				if(level.getEntity(transform.position,transform.TransformDirection(Vector3.left)).type==states.basicblock)
+				if(level.getEntity(transform.position,transform.TransformDirection(Vector3.left)).type==states.block)
 				{
 					rotation = new Vector3(0,-90,0);
 					return Vector3.zero;
@@ -63,7 +63,7 @@ public class Character_Movement_Ledge {
 				 
 				else
 				{					
-					if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.left)).type==states.basicblock
+					if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.left)).type==states.block
 						&& level.getEntity(transform.position,Vector3.up+transform.TransformDirection(Vector3.left)).type==states.empty)
 					{		
 						return transform.TransformDirection(Vector3.left);

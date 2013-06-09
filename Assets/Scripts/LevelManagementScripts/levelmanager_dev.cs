@@ -21,8 +21,8 @@ public class levelmanager_dev : levelmanager_base
 			{
 				currentlevel.name = hold.Split('/').Last().Split('.')[0];			
 				levelmanager_maplevel mapper = new levelmanager_maplevel();
-				mapper.mapLevel(currentlevel.name);
-							
+				currentlevel = mapper.mapLevel(currentlevel.name);
+				write();
 			}		
 		}
         if (Input.GetButtonUp("InputLevel") )
@@ -44,7 +44,7 @@ public class levelmanager_dev : levelmanager_base
 				currentlevel = new Level();
 				currentlevel.name = hold.Split('/').Last().Split('.')[0];	
 				
-				currentlevel.read(levelPadding);
+				read(levelPadding);
 				generateLevel();
 				currentlevel.lowestlevel = currentlevel.getlowestBlock();				
 			

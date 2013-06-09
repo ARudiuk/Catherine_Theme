@@ -2,6 +2,16 @@ public enum states
 	{
 		empty,
 		character,
-		basicblock
+		block
 	};
+
+public enum blocktypes
+{
+	basic
+};
+
+public enum charactertypes
+{
+	basic
+};
 
