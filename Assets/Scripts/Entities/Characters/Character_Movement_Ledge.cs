@@ -37,11 +37,13 @@ public class Character_Movement_Ledge {
 				
 				else
 				{
-					if(level.getEntity(transform.position+transform.TransformDirection(Vector3.forward),transform.TransformDirection(Vector3.right)).type==states.basicblock)
+					if(level.getEntity(transform.position+transform.TransformDirection(Vector3.forward),transform.TransformDirection(Vector3.right)).type==states.basicblock
+						&& level.getEntity(transform.position,Vector3.up+transform.TransformDirection(Vector3.right)).type==states.empty)
 					{						
 						return transform.TransformDirection(Vector3.right);
 					}
-					else if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.right)).type==states.empty)
+					else if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.right)).type==states.empty
+						&& level.getEntity(transform.position,Vector3.up+transform.TransformDirection(Vector3.right)+transform.TransformDirection(Vector3.forward)).type==states.empty)
 					{
 						rotation = transform.TransformDirection(new Vector3(0,-90,0));
 						return transform.TransformDirection(Vector3.forward+Vector3.right);
@@ -61,11 +63,13 @@ public class Character_Movement_Ledge {
 				 
 				else
 				{					
-					if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.left)).type==states.basicblock)
+					if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.left)).type==states.basicblock
+						&& level.getEntity(transform.position,Vector3.up+transform.TransformDirection(Vector3.left)).type==states.empty)
 					{		
 						return transform.TransformDirection(Vector3.left);
 					}
-					else if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.left)).type==states.empty)
+					else if(level.getEntity(transform.position,transform.TransformDirection(Vector3.forward)+transform.TransformDirection(Vector3.left)).type==states.empty
+						&& level.getEntity(transform.position,Vector3.up+transform.TransformDirection(Vector3.left)+transform.TransformDirection(Vector3.forward)).type==states.empty)
 					{
 						rotation = transform.TransformDirection(new Vector3(0,90,0));						
 						return transform.TransformDirection(Vector3.forward+Vector3.left);

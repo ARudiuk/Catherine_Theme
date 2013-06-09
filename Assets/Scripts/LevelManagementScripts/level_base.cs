@@ -104,7 +104,7 @@ public class Level
 		}		 
 		map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)]=hold;		
 		
-		animate (hold,0.2f,move,rotation);//make it unable to move during animation
+		animate (hold,0.15f,move,rotation);//make it unable to move during animation
 	}
 	
 	public void chainmoveObject(Vector3 position, Vector3 move, Vector3 rotation)
@@ -116,7 +116,7 @@ public class Level
 		}	
 		map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)]=hold;		
 		
-		animate (hold,0.2f,move,rotation);
+		animate (hold,0.15f,move,rotation);
 	}
 	
 	public void blockfallmoveObject(Vector3 position)
@@ -147,8 +147,8 @@ public class Level
 		map[Mathf.RoundToInt(position1.x)+Mathf.RoundToInt(move1.x),Mathf.RoundToInt(position1.y)+Mathf.RoundToInt(move1.y),Mathf.RoundToInt(position1.z)+Mathf.RoundToInt(move1.z)]=temp1;
 		map[Mathf.RoundToInt(position2.x)+Mathf.RoundToInt(move2.x),Mathf.RoundToInt(position2.y)+Mathf.RoundToInt(move2.y),Mathf.RoundToInt(position2.z)+Mathf.RoundToInt(move2.z)]=temp2;		
 		
-		animate (temp1,0.2f,move1,rotation1);
-		animate (temp2,0.2f,move2,rotation2);		
+		animate (temp1,0.15f,move1,rotation1);
+		animate (temp2,0.15f,move2,rotation2);		
 	}
 	
 	public void fixLimits()//get limits of x,y,z direction, and fixes position of blocks		

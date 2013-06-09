@@ -38,8 +38,7 @@ public class levelmanager_base : MonoBehaviour {
 				currentlevel.Objects[i].x+=levelPadding;currentlevel.Objects[i].y+=levelPadding;currentlevel.Objects[i].z+=levelPadding;
 				currentlevel.map[currentlevel.Objects[i].x,currentlevel.Objects[i].y,currentlevel.Objects[i].z]=new Entity ((GameObject)Instantiate(crappyCharacter,currentlevel.Objects[i].getCoordinates(),Quaternion.identity), states.character);	
 				Character_base temp = currentlevel.map[currentlevel.Objects[i].x,currentlevel.Objects[i].y,currentlevel.Objects[i].z].obj.GetComponent<Character_base>();
-				temp.level = currentlevel;
-				temp.timetoMove = 0.5f;
+				temp.level = currentlevel;				
 			}
 		}
 	

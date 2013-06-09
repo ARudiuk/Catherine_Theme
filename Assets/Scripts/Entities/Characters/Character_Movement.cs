@@ -10,15 +10,15 @@ public class Character_Movement {
 	private Vector3 Up = new Vector3(0,1,0);
 	private Vector3 Down = new Vector3(0,-1,0);
 	
-	public float timetoMove; // variable to tweak how long you have to hold a direction to move
-	public float timetoFall; // variable to tweak how long it takes to fall down one level			
+	//time to move: variable to tweak how long you have to hold a direction to move
+	//public float timetoFall; // variable to tweak how long it takes to fall down one level			
 	
 
-	public Character_Movement (float timetoMove) {		
-		this.timetoMove = timetoMove;
+	public Character_Movement () {		
+		
 	}
 	
-	public Vector3 move(Level level, Transform transform, TimeDirection timeD, out Vector3 rotation)
+	public Vector3 move(Level level, Transform transform, TimeDirection timeD,float timetoMove, out Vector3 rotation)
 	{		
 		//currently when going to hang off a ledge you are falling for a split second
 		//could be an issue??
@@ -114,14 +114,14 @@ public class Character_Movement {
 		{			
 			if(level.getEntity(position,timeD.direction).type==states.empty) //if there is no collision ahead, and the time is large enough then move
 					{						
-						timeD.time -= timetoMove; //subtracts time so unit doesn't move immediately 	
+						timeD.time = 0f; //Resets time so unit doesn't move immediately 	
 						return timeD.direction; //translate object in forward direction
 					}	
 			else if(level.getEntity(position,timeD.direction).type!=states.empty
 			&& level.getEntity(position,Vector3.up).type== states.empty
 			&& level.getEntity(position+timeD.direction,Vector3.up).type==states.empty) //if not unit above the block infront, and no block above, then move up a block
 			{
-					timeD.time -= timetoMove;
+					timeD.time = 0f;
 					return Up+timeD.direction;
 			}
 			

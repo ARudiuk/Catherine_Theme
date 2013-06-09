@@ -25,7 +25,7 @@ public class Character_base : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		movement = new Character_Movement(timetoMove);
+		movement = new Character_Movement();
 		ledge_movement = new Character_Movement_Ledge();
 		block_movement = new Character_Block_Move();
 		moving = false;	
@@ -33,6 +33,7 @@ public class Character_base : MonoBehaviour
 		timeD=new TimeDirection(0f,Vector3.forward);	//initializess the timeD varible, see bottom for structure
 		rotation = new Vector3(0,180,0); //makes character face forward
 		transform.eulerAngles = rotation;
+		timetoMove = 0.3f;
 	}
 	
 	// Update is called once per frame
@@ -83,7 +84,7 @@ public class Character_base : MonoBehaviour
 					this.hanging = hangingTest();
 					if(!hanging)
 					{					
-						Vector3 move = movement.move(level, transform,timeD, out rotation);
+						Vector3 move = movement.move(level, transform,timeD,timetoMove, out rotation);
 						transform.Rotate(rotation);
 						if(move != Vector3.zero)
 						{
