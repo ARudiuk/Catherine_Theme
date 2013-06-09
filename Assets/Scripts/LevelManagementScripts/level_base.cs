@@ -21,7 +21,7 @@ public class Level
 	
 	public Entity[,,] map; //maps out entities in the world for quick access
 	
-	public int lowestlevel;
+	public int lowestlevel;	
 	
 	
 	
@@ -30,7 +30,7 @@ public class Level
 		name = "temp"; 
 		Objects = new List<Entity>();
 		lowestlevel = 0;	
-		levelwidth=0;levelheight=0;leveldepth = 0;
+		levelwidth=0;levelheight=0;leveldepth = 0;	
 	}
 	
 	public Entity getEntity(Vector3 position, Vector3 move)//simplifies retrieval of entities 
@@ -103,8 +103,6 @@ public class Level
 			moveObject(position+move,move);
 		}		 
 		map[Mathf.RoundToInt(position.x)+Mathf.RoundToInt(move.x),Mathf.RoundToInt(position.y)+Mathf.RoundToInt(move.y),Mathf.RoundToInt(position.z)+Mathf.RoundToInt(move.z)]=hold;		
-		
-		hold.obj.transform.position=position+move;
 	}
 	
 	public void chainmoveObject(Vector3 position, Vector3 move)
@@ -258,6 +256,5 @@ public class Level
 			file.Write(hold);
 		}
 	}
-	
 		
 }

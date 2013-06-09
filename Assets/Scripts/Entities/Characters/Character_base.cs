@@ -85,12 +85,15 @@ public class Character_base : MonoBehaviour
 						Vector3 move = movement.move(level, transform,timeD, out rotation);
 						transform.Rotate(rotation);
 						if(move != Vector3.zero)
+						{
 							level.moveObject(transform.position,move);
+							StartCoroutine(animate (0.5f,move));//make it unable to move during animation
+						}
 					}
 				}			
 			}
 		}
-	}
+	}	
 	
 	bool hangingTest()
 	{
@@ -119,6 +122,17 @@ public class Character_base : MonoBehaviour
 			}
 		}
 		return false;
+	}
+	
+	public IEnumerator animate(float duration,Vector3 move)
+	{
+		Vector3 initial = transform.position;
+		Vector3 final = transform.position+move;
+		for(float t = 0; t < duration; t += Time.deltaTime)
+			{
+				transform.position = Vector3.Lerp(initial, final, t/duration);	
+				yield return null;
+			}		
 	}
 }
 
