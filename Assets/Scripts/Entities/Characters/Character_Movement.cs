@@ -113,10 +113,18 @@ public class Character_Movement {
 		public Vector3 displace(Level level, Vector3 position, TimeDirection timeD)
 		{			
 			if(level.getEntity(position,timeD.direction).type==states.empty) //if there is no collision ahead, and the time is large enough then move
-					{						
-						timeD.time = 0f; //Resets time so unit doesn't move immediately 	
-						return timeD.direction; //translate object in forward direction
-					}	
+			{
+				timeD.time = 0f; //Resets time so unit doesn't move immediately 
+				if(level.getEntity(position,timeD.direction+Vector3.down).type==states.empty)
+				{
+					return timeD.direction+Vector3.down;
+				}
+				
+				else
+				{							
+					return timeD.direction; //translate object in forward direction
+				}
+			}
 			else if(level.getEntity(position,timeD.direction).type!=states.empty
 			&& level.getEntity(position,Vector3.up).type== states.empty
 			&& level.getEntity(position+timeD.direction,Vector3.up).type==states.empty) //if not unit above the block infront, and no block above, then move up a block

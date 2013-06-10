@@ -16,6 +16,7 @@ public class Character_base : MonoBehaviour
 	public float timetoMove;
 	
 	public bool moving;
+	
 	public bool hanging;
 	
 	public Vector3 rotation;
@@ -39,7 +40,6 @@ public class Character_base : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{		
-		moving = level.getEntity(transform.position,Vector3.zero).moving;
 		if(!moving)
 		{			
 			if(hanging)
@@ -93,7 +93,7 @@ public class Character_base : MonoBehaviour
 					}
 				}			
 			}
-		}
+		}		
 	}	
 	
 	bool hangingTest()

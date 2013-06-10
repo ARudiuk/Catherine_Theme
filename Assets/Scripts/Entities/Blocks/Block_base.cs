@@ -9,8 +9,10 @@ public class Block_base:MonoBehaviour
 	
 	public bool baseBlock;
 	
+	public bool moving;
 	void Start()
 	{		
+		moving = false;
 		debug=false;
 	}
 	
@@ -26,19 +28,23 @@ public class Block_base:MonoBehaviour
 					Debug.Log (transform.position);
 					Debug.Log (entity.obj.transform.position);
 			}
-		}		
-		if(baseBlock==false)
+		}
+		if(moving==false)
 		{
-			if(transform.position.y-1<0)
+			if(baseBlock==false)
 			{
-				level.setMap(transform.position,new Entity());
-				Destroy(gameObject);
-			}
-			else if(level.getsupportingEntity(transform.position).Count==0)
-			{
-				level.blockfallmoveObject(transform.position);			
+				if(transform.position.y-1==-1)
+				{
+					level.setMap(transform.position,new Entity());
+					Destroy(gameObject);
+				}
+				else if(level.getsupportingEntity(transform.position).Count==0)
+				{
+					level.blockfallmoveObject(transform.position);			
+				}
 			}
 		}
 	}
+	
 	
 }

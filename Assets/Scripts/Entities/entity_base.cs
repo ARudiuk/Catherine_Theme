@@ -16,12 +16,34 @@ public class Entity : System.IEquatable<Entity>
 	[JsonProperty]
 	public int subtype;
 	
-	public GameObject obj;
+	public GameObject obj;	
 	
-	public bool moving;
+	public bool moving
+	{
+		get{
+			if (type == states.block)
+		{			
+			return obj.GetComponent<Block_base>().moving;
+		}
+		else //(type == states.character)
+		{			
+			return obj.GetComponent<Character_base>().moving;
+		}
+		}
+		set{
+			if (type == states.block)
+		{			
+			obj.GetComponent<Block_base>().moving=value;
+		}
+		else if(type == states.character)
+		{			
+			obj.GetComponent<Character_base>().moving=value;
+		}			
+		}
+	}
 	
 	public Entity()
-	{
+	{		
 		moving = false;
 		obj = null;
 		this.type=states.empty;

@@ -143,11 +143,13 @@ public class Level
 			}
 			else{
 				chainmoveObject(position, Vector3.down, Vector3.zero);
+				setMap(position,new Entity());
 			}			
 		}
 		else
 		{
 			chainmoveObject(position, Vector3.down, Vector3.zero);
+			setMap(position,new Entity());
 		}
 	}
 	
@@ -257,20 +259,20 @@ public class Level
 	public void animate(Entity entity, float duration,Vector3 move, Vector3 rotation)
 	{
 		Vector3 initial = entity.obj.transform.position;
-		Vector3 final = initial+move;
+		Vector3 final = initial+move;		
 		
 		if (entity.type == states.character)
 		{
-			entity.obj.GetComponent<Character_base>().StartCoroutine(animation(entity,duration,initial,final,Vector3.zero,Vector3.zero));
+			entity.obj.GetComponent<Character_base>().StartCoroutine(animation(entity,duration,initial,final,entity.obj.transform.eulerAngles,rotation));
 		}
 		else if (entity.type == states.block)
 		{
-			entity.obj.GetComponent<Block_base>().StartCoroutine(animation(entity,duration,initial,final,Vector3.zero,Vector3.zero));
+			entity.obj.GetComponent<Block_base>().StartCoroutine(animation(entity,duration,initial,final,entity.obj.transform.eulerAngles,rotation));
 		}
 	}
 	
-	public IEnumerator animation(Entity entity, float duration, Vector3 start, Vector3 end, Vector3 initialrotation, Vector3 finalrotation)
-	{
+	public IEnumerator animation(Entity entity, float duration, Vector3 start, Vector3 end, Vector3 initialrotation, Vector3 rotation)
+	{		
 		entity.moving=true;
 		for(float t = 0; t < duration; t += Time.deltaTime)
 			{
@@ -278,6 +280,7 @@ public class Level
 				yield return null;
 			}
 		entity.obj.transform.position = end; //bad  hack to fix animation not being perfect
+		//entity.obj.transform.Rotate(rotation); //double the hack, double 
 		entity.moving = false;
 	}
 		
