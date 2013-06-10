@@ -25,25 +25,40 @@ public class levelmanager_base : MonoBehaviour {
 
 	protected void generateLevel()
 	{		
+		for (int k = 0; k<currentlevel.Objects.Count;k++)
+		{
+			currentlevel.Objects[k].x+=levelPadding;currentlevel.Objects[k].y+=levelPadding;currentlevel.Objects[k].z+=levelPadding;
+		}
+		currentlevel.lowestlevel = currentlevel.getlowestBlock();
+		for(int j = 0; j<currentlevel.levelheight;j++)
+		{
+			GameObject level = new GameObject("Level "+j);
+			//level.transform.position = new Vector3(0,j+levelPadding,0);
+			level.tag = "block";
+		}
 		for (int i = 0; i<currentlevel.Objects.Count;i++)
 		{
 			if (currentlevel.Objects[i].type==states.block)
-			{	
-				currentlevel.Objects[i].x+=levelPadding;currentlevel.Objects[i].y+=levelPadding;currentlevel.Objects[i].z+=levelPadding;
+			{				
 				currentlevel.setMap(currentlevel.Objects[i].getCoordinates(),new Entity((GameObject)Instantiate(block,currentlevel.Objects[i].getCoordinates(),Quaternion.identity),states.block,(int) blocktypes.basic));	
 	            Block_base temp = currentlevel.getEntity(currentlevel.Objects[i].getCoordinates()).obj.GetComponent<Block_base>();
 				temp.level = currentlevel;
-			
+				temp.transform.parent = GameObject.Find("Level " +(temp.transform.position.y-currentlevel.lowestlevel)).transform;
+				temp.baseBlock=false;
 			}
 			if (currentlevel.Objects[i].type==states.character)
-			{
-				currentlevel.Objects[i].x+=levelPadding;currentlevel.Objects[i].y+=levelPadding;currentlevel.Objects[i].z+=levelPadding;
+			{				
 				currentlevel.setMap(currentlevel.Objects[i].getCoordinates(),new Entity ((GameObject)Instantiate(crappyCharacter,currentlevel.Objects[i].getCoordinates(),Quaternion.identity), states.character, (int)charactertypes.basic));	
 				Character_base temp = currentlevel.getEntity(currentlevel.Objects[i].getCoordinates()).obj.GetComponent<Character_base>();
 				temp.level = currentlevel;				
+				temp.transform.parent = GameObject.Find("Level " +(temp.transform.position.y-currentlevel.lowestlevel)).transform;
 			}
-		}
-	
+		}		
+		Block_base [] children = GameObject.Find("Level 0").transform.GetComponentsInChildren<Block_base>();
+		foreach(Block_base child in children)
+		{
+			child.baseBlock=true;
+		}		
 	}
 	
 	protected void read(int padding)

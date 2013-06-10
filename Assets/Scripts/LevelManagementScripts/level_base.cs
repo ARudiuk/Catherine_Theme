@@ -114,11 +114,7 @@ public class Level
 		Debug.Log("The final position is " + getEntity(position,move).type);		
 		
 		Entity hold = getEntity(position);
-		setMap(position,new Entity());
-		if(getEntity(position,move).type==states.block)
-		{
-			moveObject(position+move,move,rotation);
-		}		 
+		setMap(position,new Entity());				 
 		setMap(position,move,hold);		
 		
 		animate (hold,0.15f,move,rotation);//make it unable to move during animation
@@ -138,14 +134,21 @@ public class Level
 	
 	public void blockfallmoveObject(Vector3 position)
 	{
+				
 		if(getEntity(position,Vector3.up).type==states.block)
+		{
+			if(getsupportingEntity(position+Vector3.up).Count==1)
 			{
-				if(getsupportingEntity(position+Vector3.up).Count<=1)
-				{
-					blockfallmoveObject(position+Vector3.up);
-				}
+				blockfallmoveObject(position+Vector3.up);
 			}
-		moveObject(position,Vector3.down, Vector3.zero);
+			else{
+				chainmoveObject(position, Vector3.down, Vector3.zero);
+			}			
+		}
+		else
+		{
+			chainmoveObject(position, Vector3.down, Vector3.zero);
+		}
 	}
 	
 	public void movetwoObjects(Vector3 position1, Vector3 position2, Vector3 move1, Vector3 move2, Vector3 rotation1, Vector3 rotation2)
@@ -260,7 +263,7 @@ public class Level
 		{
 			entity.obj.GetComponent<Character_base>().StartCoroutine(animation(entity,duration,initial,final,Vector3.zero,Vector3.zero));
 		}
-		if (entity.type == states.block)
+		else if (entity.type == states.block)
 		{
 			entity.obj.GetComponent<Block_base>().StartCoroutine(animation(entity,duration,initial,final,Vector3.zero,Vector3.zero));
 		}

@@ -44,9 +44,9 @@ public class levelmanager_dev : levelmanager_base
 				currentlevel = new Level();
 				currentlevel.name = hold.Split('/').Last().Split('.')[0];	
 				
-				read(levelPadding);
+				read(levelPadding);				
 				generateLevel();
-				currentlevel.lowestlevel = currentlevel.getlowestBlock();				
+				
 			
 			}
 		}	
