@@ -10,11 +10,11 @@ using System.IO; //for reading writing files
 public class Level
 {
 	[JsonProperty]
-	public int levelwidth;
+	public int levelwidth; //width level, not including padding - x
 	[JsonProperty]
-	public int levelheight;
+	public int levelheight; //y
 	[JsonProperty]
-	public int leveldepth;
+	public int leveldepth;//z
 	[JsonProperty]
 	public List<Entity> Objects; //hold position of all blocks and type in last. Make custom class instead of Vector4 later, so we don't have to think about ints
 	
@@ -24,7 +24,7 @@ public class Level
 	
 	public Entity[,,] map; //maps out entities in the world for quick access
 	
-	public int lowestlevel;	
+	public int lowestlevel;	//tracks the lowest level block
 	
 	
 	
@@ -36,26 +36,27 @@ public class Level
 		levelwidth=0;levelheight=0;leveldepth = 0;	
 	}
 	
-	public Entity getEntity(Vector3 position, Vector3 move)//simplifies retrieval of entities 
+	public Entity getEntity(Vector3 position, Vector3 move)//simplifies retrieval of entities, takes two positions and adds them
 	{		
 		return(map[Mathf.RoundToInt(position.x+move.x),Mathf.RoundToInt(position.y+move.y),Mathf.RoundToInt(position.z+move.z)]);
 	}
 	
-	public Entity getEntity(Vector3 position)//simplifies retrieval of entities 
+	public Entity getEntity(Vector3 position)//simplifies retrieval of entities, takes one position
 	{		
 		return(map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)]);
 	}
 	
-	public void setMap(Vector3 position,Entity entity)
+	public void setMap(Vector3 position,Entity entity) //simplifies setting map value
 	{
 		map[Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y),Mathf.RoundToInt(position.z)]=entity;
 	}
 	
-	public void setMap(Vector3 position,Vector3 move,Entity entity)
+	public void setMap(Vector3 position,Vector3 move,Entity entity) //simplifies setting map values, two positons
 	{
 		map[Mathf.RoundToInt(position.x+move.x),Mathf.RoundToInt(position.y+move.y),Mathf.RoundToInt(position.z+move.z)]=entity;
 	}
 	//UPDATE THIS FOR STUFF OTHER THAN block
+	//checks surround positions.
 	public List<Entity> getsurroundingEntity(Vector3 position)
 	{
 		List<Entity> temp = new List<Entity>();
@@ -87,7 +88,9 @@ public class Level
 		return temp;
 		
 	}
-	
+	//checks if there are any supporting blocks
+	//first it checks below, then it checks surrounding blocks of below block
+	//returns the list
 	public List<Entity> getsupportingEntity(Vector3 position)
 	{
 		List<Entity> temp = new List<Entity>();
@@ -96,7 +99,7 @@ public class Level
 		temp.AddRange(getsurroundingEntity(position+Vector3.down));	
 		return temp;
 	}	
-	
+	//add object to object list, used with map level for now
 	public void addObject(Entity newobject)
 	{
 		if(!Objects.Contains(newobject))
@@ -107,7 +110,9 @@ public class Level
 		else
 			Debug.LogError("Duplicate Blocks"+newobject.getCoordinates());
 	}
-	
+	//moves an object, take objects positions, move, and its rotation change
+	//sets object position to empty, and makes new position equal to object
+	//animation makes sure that the visible representation of the object moves forward with the data
 	public void moveObject(Vector3 position, Vector3 move, Vector3 rotation)
 	{
 		Debug.Log("The initial position is " + getEntity(position).type);
@@ -120,6 +125,7 @@ public class Level
 		animate (hold,0.15f,move,rotation);//make it unable to move during animation
 	}
 	
+	//moves a chain of blocks, doesn't properly account for initial position being empty, so that must be done before calling this
 	public void chainmoveObject(Vector3 position, Vector3 move, Vector3 rotation)
 	{
 		Entity hold = getEntity(position);
@@ -132,6 +138,9 @@ public class Level
 		animate (hold,0.15f,move,rotation);
 	}
 	
+	//handles blocks falling
+	//it goes up to the top block that will fall, then calls chainmoveobjects going down
+	//makes sure to set initial position as empty at the top
 	public void blockfallmoveObject(Vector3 position)
 	{
 				
@@ -153,6 +162,9 @@ public class Level
 		}
 	}
 	
+	//used for moving two objects, like when grabbing
+	//first it remembers the objects, and checks if the second entity entity moving forward will hit a block, if it does it starts a chain move
+	//then in does the typical new object creation, then moveing objects, then animation
 	public void movetwoObjects(Vector3 position1, Vector3 position2, Vector3 move1, Vector3 move2, Vector3 rotation1, Vector3 rotation2)
 	{
 		Entity temp1 = getEntity(position1);
@@ -173,8 +185,10 @@ public class Level
 		animate (temp2,0.15f,move2,rotation2);		
 	}
 	
-	public void fixLimits()//get limits of x,y,z direction, and fixes position of blocks		
-		//right now this always resets the coordinates, even in right place. I find this make it more seperated, and easier to modify later
+	//get limits of x,y,z direction, and fixes position of blocks
+	//right now this always resets the coordinates, even in right place. I find this make it more seperated, and easier to modify later
+	//also sets the maximium dimension variables width,etc
+	public void fixLimits()		
 	{		
 		int minx=Objects[0].x,maxx=Objects[0].x,miny=Objects[0].y,maxy=Objects[0].y,minz=Objects[0].z,maxz=Objects[0].z;
 		foreach(Entity item in Objects)
@@ -217,6 +231,7 @@ public class Level
 		//return new Vector3(maxx+1,maxy+1,maxz+1);		
 	}
 	
+	//makes an empty  map of level dimension plus padding
 	public void constructMatrix(int padding)//dist is the distance from the limits
 	{
 		map = new Entity[levelwidth+padding*2,levelheight+padding*2,leveldepth+padding*2];
@@ -232,7 +247,7 @@ public class Level
 			}
 		}
 	}
-	
+	//goes through all objects and returns lowest block
 	public int getlowestBlock()
 	{
 		int result=Objects[1].y;
@@ -242,20 +257,11 @@ public class Level
 				result = item.y;
 		}
 		return result;
-	}
-					
-	public Entity checkforObjects(int x, int y, int z)
-	{
-		foreach (Entity item in Objects)
-		{
-			if (item.x==x && item.y==y && item.z==z)
-			{
-				return item;
-			}
-		}
-		return null;
 	}					
 	
+	//temporary animation manager
+	//currently sets up proper limits, and calls coroutine in right base class
+	//no rotation yet
 	public void animate(Entity entity, float duration,Vector3 move, Vector3 rotation)
 	{
 		Vector3 initial = entity.obj.transform.position;
@@ -271,6 +277,8 @@ public class Level
 		}
 	}
 	
+	//the couritine that animates a movement. Simply lerps between start and end position.
+	//sets entity to be moving, so it can't be moved while animating
 	public IEnumerator animation(Entity entity, float duration, Vector3 start, Vector3 end, Vector3 initialrotation, Vector3 rotation)
 	{		
 		entity.moving=true;

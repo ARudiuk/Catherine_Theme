@@ -4,15 +4,7 @@ using System.Collections.Generic;
 
 public class levelmanager_maplevel : MonoBehaviour {
 	
-		
-	Vector3 right = new Vector3(1,0,0);
-	Vector3 left = new Vector3(-1,0,0);
-	Vector3 up = new Vector3(0,1,0);
-	Vector3 down = new Vector3(0,-1,0);
-	Vector3 forward = new Vector3(0,0,1);
-	Vector3 back = new Vector3(0,0,-1);
-
-
+	//holds data needed for search
 	public struct Point
 	{
 		public Vector3 position;
@@ -28,14 +20,14 @@ public class levelmanager_maplevel : MonoBehaviour {
 
 	public Level mapLevel(string name)//breadth first mapping of level, that goes one extra block out. Naive implementation. Need to get character away from cubes to work
 	{
-		
+		//Create array of directions to check for mapping
 		Vector3[] directions = new Vector3[6]; //declare array to go through, maybe find more elegant way
-		directions[0] = right;
-		directions[1] = left;
-		directions[2] = up;
-		directions[3] = down;
-		directions[4] = forward;
-		directions[5] = back;
+		directions[0] = Vector3.right;
+		directions[1] = Vector3.left;
+		directions[2] = Vector3.up;
+		directions[3] = Vector3.down;
+		directions[4] = Vector3.forward;
+		directions[5] = Vector3.back;
 
 		List<Point> reached = new List<Point>();
 		List<Point> toreach = new List<Point>();

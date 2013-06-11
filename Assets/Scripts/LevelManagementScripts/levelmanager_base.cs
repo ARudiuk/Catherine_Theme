@@ -40,7 +40,7 @@ public class levelmanager_base : MonoBehaviour {
 		{
 			GameObject level = new GameObject("Level "+j);
 			level.transform.position = new Vector3(0,j+levelPadding,0);//just felt right
-			level.tag = "block";//for deleting
+			//level.tag = "block";//for deleting --need different tag
 		}
 		//this generates the gamobjects, and attaches the baseclasses to the right type
 		//it goes through all the objects loaded into the objects list of current level
