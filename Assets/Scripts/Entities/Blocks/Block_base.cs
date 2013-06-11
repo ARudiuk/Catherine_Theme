@@ -10,10 +10,14 @@ public class Block_base:MonoBehaviour
 	public bool baseBlock;
 	
 	public bool moving;
+	void Awake()
+	{
+		baseBlock = true; //this needs to be called in awake, because in start it overrides previous input
+	}
 	void Start()
 	{		
 		moving = false;
-		debug=false;
+		debug=false;		
 	}
 	
 	void Update()
