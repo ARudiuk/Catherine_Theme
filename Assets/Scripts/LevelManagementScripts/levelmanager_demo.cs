@@ -5,8 +5,9 @@ public class levelmanager_demo : levelmanager_base {
 
 	// Use this for initialization
 	void Start () {
+		Debug.Log("starting");
 		currentlevel = new Level();
-		currentlevel.name = "Alpha1";
+		currentlevel.name = "alpha1";
 		read (3);
 		generateLevel();
 	}

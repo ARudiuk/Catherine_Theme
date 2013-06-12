@@ -7,11 +7,14 @@ public class end_Timer : MonoBehaviour {
 	public float endTime;
 	public static float totalTime;
 
-	void OnTriggerEnter(Collider character)
+	void Update()
 	{
-		endTime = Time.time;
-		totalTime = endTime-startTime;
-		Application.LoadLevel("GameOver");
+		if(GameObject.FindGameObjectWithTag("character").transform.position==transform.position)
+		{
+			endTime = Time.time;
+			totalTime = endTime-startTime;
+			Application.LoadLevel("GameOver");
+		}
 	}
 
 	void Awake()
