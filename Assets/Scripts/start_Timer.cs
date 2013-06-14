@@ -5,7 +5,10 @@ public class start_Timer : MonoBehaviour {
 	
 	void Update()
 	{
-		if(GameObject.FindGameObjectWithTag("character").transform.position==transform.position)
-			end_Timer.startTime=Time.time;
+		if(GameObject.FindGameObjectWithTag("character")!=null)
+		{
+			if(GameObject.FindGameObjectWithTag("character").transform.position==transform.position)
+				end_Timer.startTime=Time.time;
+		}
 	}
 }

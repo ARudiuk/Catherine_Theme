@@ -1,13 +1,13 @@
 using UnityEngine;
 using System.Collections;
-using Newtonsoft.Json; //external json library
+using LitJson;
 using System.IO; //for reading writing files
 
 public class levelmanager_base : MonoBehaviour {
 	
 	public GameObject block;//temp public till subtypes are implemented
 	public GameObject crappyCharacter;//temp public till subtypes are implemented
-	public Level currentlevel;//holds reference to currently loaded level
+	public Level currentlevel;//holds reference to currently loaded level	
 	
 	public int levelPadding;//amount to pad level on all sides so that checks are always within the map
 	// Use this for initialization
@@ -79,16 +79,45 @@ public class levelmanager_base : MonoBehaviour {
 	//then make the matrix of right size, including padding
 	protected void read(int padding)
 	{	
-		Debug.Log ("reading level");
-		using(StreamReader file = new StreamReader(Application.dataPath+"/Levels/"+currentlevel.name+".json"))
+		Debug.Log ("reading level");		
+		if(!Application.isWebPlayer)
 		{
-			string hold = file.ReadToEnd();
-			currentlevel = JsonConvert.DeserializeObject<Level>(hold);						
-		}
+			using(StreamReader file = new StreamReader(Application.dataPath+"/Levels/"+currentlevel.name+".json"))
+			{
+				string hold = file.ReadToEnd();
+				currentlevel = JsonMapper.ToObject<Level>(hold);				
+			}		
 		currentlevel.fixLimits();
 		currentlevel.constructMatrix(padding);
+		generateLevel();
+		}
 		
+		else if(Application.isWebPlayer)
+		{			
+			StartCoroutine(remoteCall());					
+		}	
+	}	
+	
+	public bool changinglevels;
+	protected IEnumerator remoteCall()
+	{
+		changinglevels = true;
+		WWW content = new WWW(@"http://wiki-412.appspot.com/json/alpha2.json");
+			while(!content.isDone)
+			{
+				Debug.Log("fetching");	
+				yield return null;
+			}
+			string hold = content.text;
+			currentlevel = JsonMapper.ToObject<Level>(hold);		
+		currentlevel.fixLimits();
+		currentlevel.constructMatrix(3);	
+		generateLevel();
+		changinglevels = false;
 	}
+	
+	
+	
 	//remove unnecesary space with fixlimits before writing to a file
 	protected void write()
 	{
@@ -96,7 +125,7 @@ public class levelmanager_base : MonoBehaviour {
 		currentlevel.fixLimits();
 		using (StreamWriter file = new StreamWriter(Application.dataPath+"/Levels/"+currentlevel.name+".json"))
 		{
-			string hold = JsonConvert.SerializeObject(currentlevel,Formatting.Indented); //serialize public properties and format with indentations	
+			string hold = JsonMapper.ToJson(currentlevel); //serialize public properties and format with indentations	
 			//Debug.Log(hold);
 			file.Write(hold);
 		}

@@ -7,11 +7,10 @@ public class levelmanager_demo : levelmanager_base {
 	void Start () {
 		Debug.Log("starting");
 		currentlevel = new Level();
-		currentlevel.name = "alpha1";
-		read (3);
-		generateLevel();
+		currentlevel.name = "alpha2";
+		read (3);		
 		rowfallcount = 0;
-		rowfalltime=4;
+		rowfalltime=4;			
 	}
 	
 	int rowfallcount;
@@ -68,21 +67,26 @@ public class levelmanager_demo : levelmanager_base {
 	void generate()
 	{
 		currentlevel = new Level();
-			currentlevel.name = "alpha1";			
-			read (3);
-			GameObject[] blockArray = GameObject.FindGameObjectsWithTag("block");
-				for(int i = 0; i < blockArray.Length; i++)
-				{
-					GameObject.Destroy(blockArray[i]);
-				}
-				GameObject[] characterArray = GameObject.FindGameObjectsWithTag("character");
-				for(int i = 0; i < characterArray.Length; i++)
-				{
-					GameObject.Destroy(characterArray[i]);
-				}	
-			generateLevel();
-			rowfallcount = 0;
-			end_Timer.startTime=Time.time;
+		currentlevel.name = "alpha2";				
+		GameObject[] blockArray = GameObject.FindGameObjectsWithTag("block");
+			for(int i = 0; i < blockArray.Length; i++)
+			{
+				GameObject.Destroy(blockArray[i]);
+			}
+			GameObject[] characterArray = GameObject.FindGameObjectsWithTag("character");
+			for(int i = 0; i < characterArray.Length; i++)
+			{
+				GameObject.Destroy(characterArray[i]);
+			}
+		read (3);	
+		StartCoroutine(refreshLevel());
+	}
+	
+	IEnumerator refreshLevel()
+	{
+		while(changinglevels==true)
+			yield return null;	
+		rowfallcount = 0;
 	}
 	
 }

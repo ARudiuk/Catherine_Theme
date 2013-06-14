@@ -9,11 +9,13 @@ public class end_Timer : MonoBehaviour {
 
 	void Update()
 	{
-		if(GameObject.FindGameObjectWithTag("character").transform.position==transform.position)
-		{
-			endTime = Time.time;
-			totalTime = endTime-startTime;
-			Application.LoadLevel("GameOver");
+		if (GameObject.FindGameObjectWithTag("character")!=null) {
+			if(GameObject.FindGameObjectWithTag("character").transform.position==transform.position)
+			{
+				endTime = Time.time;
+				totalTime = endTime-startTime;
+				Application.LoadLevel("GameOver");
+			}
 		}
 	}
 
