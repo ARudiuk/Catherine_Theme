@@ -22,6 +22,7 @@ public class Block_base:MonoBehaviour
 	
 	void Update()
 	{	
+		//just to debug blogs if necessary. Can be turned on in game
 		if(debug==true)
 		{			
 			Debug.Log(level.getsupportingEntity(transform.position).Count);
@@ -33,6 +34,9 @@ public class Block_base:MonoBehaviour
 					Debug.Log (entity.obj.transform.position);
 			}
 		}
+		//if not moving, then go ahead and check if block needs to all. 
+		//that is if firstly it isn't a base block, then if nothing is supporting it, fall
+		//also if block one step away from out of bounds, destroy it
 		if(moving==false)
 		{
 			if(baseBlock==false)

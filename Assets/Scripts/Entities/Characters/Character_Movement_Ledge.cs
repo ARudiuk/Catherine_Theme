@@ -10,22 +10,21 @@ public class Character_Movement_Ledge {
 	// Update is called once per frame
 	public Vector3 move (Level level, Transform transform, TimeDirection timeD, out Vector3 rotation) {	
 		
-		//Character_Block_Move otherBlock = gameObject.GetComponent<Character_Block_Move>();
-				
-		//I broke ledge hanging I'm shit I know
-		//this input check may need fixing later when movement has been smootehr
-		
+		//set up return value
 		rotation = Vector3.zero;
 		
+		//if pressing grab then let go
 		if(Input.GetButtonDown("Grab"))
 		{			
 			return Vector3.down;
 		}
 		
+		//if left or right pressed
 		if (Input.GetButtonDown("Horizontal"))
 			{
 				float test = Input.GetAxis("Horizontal");
-			
+			//if right
+			//check if block directly to right, if so then rotate
 			if(test>0)
 			{
 				
@@ -34,6 +33,12 @@ public class Character_Movement_Ledge {
 					rotation = new Vector3(0,90,0);
 					return Vector3.zero;
 				}
+				
+				
+				//if no block to the right, then check if block forward and right from the characters is empty. 
+				//if so then move around the corner
+				//otherwise if there is a block forward and right, move right
+				//in both cases, make sure there is no block above the new position
 				
 				else
 				{
@@ -51,7 +56,7 @@ public class Character_Movement_Ledge {
 				}
 				
 			}
-			
+			//inverse of previous section
 			else
 			{
 				
@@ -79,7 +84,10 @@ public class Character_Movement_Ledge {
 			}	
 			
 		}
-			
+		
+		//if up or down is pressed
+		//if it's up, check if character can climb up
+		//if down then fall
 		if (Input.GetButtonDown("Vertical"))
 			{
 				float test = Input.GetAxis("Vertical");				

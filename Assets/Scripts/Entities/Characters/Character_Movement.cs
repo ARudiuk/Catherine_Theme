@@ -13,7 +13,9 @@ public class Character_Movement {
 	//time to move: variable to tweak how long you have to hold a direction to move
 	//public float timetoFall; // variable to tweak how long it takes to fall down one level			
 	
-
+	//COMMENT THIS
+	//COMMENT THIS
+	//COMENT THIS
 	public Character_Movement () {		
 		
 	}
