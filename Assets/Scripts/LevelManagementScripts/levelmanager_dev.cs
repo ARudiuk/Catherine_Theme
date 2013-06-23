@@ -55,8 +55,6 @@ public class levelmanager_dev : levelmanager_base
 				currentlevel.name = hold.Split('/').Last().Split('.')[0];	
 				
 				read(levelPadding);				
-				generateLevel();
-				
 			
 			}
 		}	

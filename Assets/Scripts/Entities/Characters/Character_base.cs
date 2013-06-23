@@ -73,8 +73,7 @@ public class Character_base : MonoBehaviour
 					}
 					//all any other non zero movement, then it has to be a movement along an edge
 					else if(move!=Vector3.zero)
-						level.moveObject(transform.position,move, rotation);
-					transform.Rotate(rotation);
+						level.moveObject(transform.position,move, rotation);					
 				}
 			//situation if character isn't hanging
 			else{
@@ -83,8 +82,7 @@ public class Character_base : MonoBehaviour
 				if(Input.GetButton("Grab"))
 				{					
 					List<Vector3> move = block_movement.move(level,transform,timeD,out rotation);
-					transform.Rotate(rotation);
-					
+					level.moveObject(transform.position,Vector3.zero,rotation);
 					if(move.Count != 0)
 					{
 						if(move.Count<=2)
@@ -104,10 +102,9 @@ public class Character_base : MonoBehaviour
 					this.hanging = hangingTest();
 					if(!hanging)
 					{					
-						Vector3 move = movement.move(level, transform,timeD,timetoMove, out rotation);
-						transform.Rotate(rotation);
-						if(move != Vector3.zero)
-						{
+						Vector3 move = movement.move(level, transform,timeD,timetoMove, out rotation);						
+						if(move != Vector3.zero || rotation!= Vector3.zero)
+						{							
 							level.moveObject(transform.position,move, rotation);							
 						}
 					}

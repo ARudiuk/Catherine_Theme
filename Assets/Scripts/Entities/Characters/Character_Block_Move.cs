@@ -33,7 +33,9 @@ public class Character_Block_Move {
 					if(entity.type==states.block)
 					{
 						grabbing = true;
-						rotation = new Vector3(0,Vector3.Angle(entity.obj.transform.position-transform.position,transform.TransformDirection(Vector3.forward)),0);
+						float angle = Vector3.Angle(transform.TransformDirection(Vector3.forward),entity.obj.transform.position-transform.position);
+						Vector3 cross = Vector3.Cross(transform.TransformDirection(Vector3.forward),entity.obj.transform.position-transform.position);
+						rotation = (cross.y>0)?new Vector3(0,angle,0):new Vector3(0,-angle,0);
 						return movement; 
 					}
 				}

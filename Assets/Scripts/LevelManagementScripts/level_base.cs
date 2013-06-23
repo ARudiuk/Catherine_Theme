@@ -287,7 +287,8 @@ public class Level
 				yield return null;
 			}
 		entity.obj.transform.position = end; //bad  hack to fix animation not being perfect
-		//entity.obj.transform.Rotate(rotation); //double the hack, double 
+		Debug.Log(rotation);
+		entity.obj.transform.Rotate(rotation); //double the hack, double 
 		entity.moving = false;
 	}
 		

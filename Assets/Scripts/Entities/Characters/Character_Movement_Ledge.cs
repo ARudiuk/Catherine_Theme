@@ -30,7 +30,7 @@ public class Character_Movement_Ledge {
 				
 				if(level.getEntity(transform.position,transform.TransformDirection(Vector3.right)).type==states.block)
 				{
-					rotation = new Vector3(0,90,0);
+					rotation = transform.TransformDirection(new Vector3(0,90,0));
 					return Vector3.zero;
 				}
 				

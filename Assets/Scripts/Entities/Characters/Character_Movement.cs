@@ -38,7 +38,7 @@ public class Character_Movement {
 			{				
 				if (timeD.direction!=Right) //checks if last button was for right
 				{
-					rotation = new Vector3(0,90,0)-transform.eulerAngles; //turn towards right
+					rotation = new Vector3(0,90,0)-transform.eulerAngles; //turn towards right					
 					timeD.time = 0; //resets time, and sets direction to right
 					timeD.direction = Right;
 					Debug.Log("right"); //debugs right in console
