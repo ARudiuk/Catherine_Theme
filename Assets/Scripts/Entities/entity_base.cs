@@ -1,19 +1,13 @@
 using UnityEngine;
 using System.Collections;
-using Newtonsoft.Json;
 
-[JsonObject(MemberSerialization.OptIn)]
 public class Entity : System.IEquatable<Entity>
 {
-	[JsonProperty]
 	public int x;
-	[JsonProperty]
 	public int y;
-	[JsonProperty]
 	public int z;
-	[JsonProperty]
 	public states type;
-	[JsonProperty]
+	
 	public int subtype;
 	
 	public GameObject obj;	

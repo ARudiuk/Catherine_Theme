@@ -41,7 +41,7 @@ public class Character_base : MonoBehaviour
 		timeD=new TimeDirection(0f,Vector3.forward);	//initializess the timeD varible, see bottom for structure
 		rotation = new Vector3(0,180,0); //makes character face forward
 		transform.eulerAngles = rotation;
-		timetoMove = 0.3f;
+		timetoMove = 0.13f;
 	}
 	
 	// Update is called once per frame

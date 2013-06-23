@@ -3,19 +3,18 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json; //external json library
 using System.IO; //for reading writing files
 
-[JsonObject(MemberSerialization.OptIn)] //says to only consider json writable/readable properties to be those with the [JsonProperty] tag
+
 public class Level
 {
-	[JsonProperty]
+	
 	public int levelwidth; //width level, not including padding - x
-	[JsonProperty]
+	
 	public int levelheight; //y
-	[JsonProperty]
+	
 	public int leveldepth;//z
-	[JsonProperty]
+	
 	public List<Entity> Objects; //hold position of all blocks and type in last. Make custom class instead of Vector4 later, so we don't have to think about ints
 	
 	private Vector3 count; //keep track of dimensions

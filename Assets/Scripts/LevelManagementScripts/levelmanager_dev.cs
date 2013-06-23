@@ -20,7 +20,7 @@ public class levelmanager_dev : levelmanager_base
 		//then call write to output the data
 		if(Input.GetButtonUp("OutputLevel"))
 		{
-			string hold = EditorUtility.SaveFilePanel("Save File",Application.dataPath+"/Levels/",currentlevel.name+".json","json");
+			string hold =  EditorUtility.SaveFilePanel("Save File",Application.dataPath+"/Levels/",currentlevel.name+".json","json");
 			if(hold!="")
 			{
 				currentlevel.name = hold.Split('/').Last().Split('.')[0];			
