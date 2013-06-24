@@ -31,108 +31,53 @@ public class Character_Movement {
 			return Down;
 		}
 		
-		if(Input.GetButton("Horizontal") && !Input.GetButton("Grab")) //checks left/right directional keys and if grab isn't pressed
+		if(timeD.direction!=transform.TransformDirection(Vector3.forward)) //if direction that is designated for character does not equal current rotation
 		{
-			float test = Input.GetAxis("Horizontal");//check if movement is along x-axis
-			if (test>0) //if right
+			if (timeD.direction==Vector3.right) //if right
 			{				
-				if (timeD.direction!=Right) //checks if last button was for right
-				{
-					rotation = new Vector3(0,90,0)-transform.eulerAngles; //turn towards right					
-					timeD.time = 0; //resets time, and sets direction to right
-					timeD.direction = Right;
-					Debug.Log("right"); //debugs right in console
-				}
-				else
-				{
-					timeD.time += Time.deltaTime; //only situation where direction isn't right is if it is right, so adds up time to move
-				}				
+				rotation = new Vector3(0,90,0)-transform.eulerAngles; //turn towards right					
 			}
-			else //same as last block, different direction
-			{				
-				if (timeD.direction!=Left)
-				{
-					rotation = new Vector3(0,-90,0)-transform.eulerAngles;
-					timeD.time = 0;
-					timeD.direction = Left;
-					Debug.Log("left");
-				}
-				else
-				{
-					timeD.time += Time.deltaTime;
-				}	
-			}					
-		}
-
-		if(Input.GetButton("Vertical")&& !Input.GetButton("Grab")) //same as last if block, except checks up/down directional keys
+			else if(timeD.direction==Vector3.left)
 			{
-			float test = Input.GetAxis("Vertical");//check if movement is along z-axis
-			if (test>0)
-			{				
-				if (timeD.direction!=Forward)
-				{
-					rotation = new Vector3(0,0,0)-transform.eulerAngles;
-					timeD.time = 0;
-					timeD.direction = Forward;
-					Debug.Log("up");
-				}
-				else
-				{
-					timeD.time += Time.deltaTime;
-				}				
+				rotation = new Vector3(0,-90,0)-transform.eulerAngles;
 			}
-			else
-			{				
-				if (timeD.direction!=Back)
-				{
-					rotation = new Vector3(0,180,0)-transform.eulerAngles;
-					timeD.time = 0;
-					timeD.direction = Back;
-					Debug.Log("down");
-				}
-				else
-				{
-					timeD.time += Time.deltaTime;
-				}				
-			}		
+			else if(timeD.direction==Vector3.forward)
+			{
+				rotation = new Vector3(0,0,0)-transform.eulerAngles;
+			}
+			else if(timeD.direction==Vector3.back)
+			{
+				rotation = new Vector3(0,180,0)-transform.eulerAngles;
+			}						
+		}			
 			
-			}
 		if(timeD.time>timetoMove)
 			{				
-				return displace(level,transform.position, timeD);
+				return displace(level,transform.position, transform);
 			}
-		
-		if((!Input.GetButton("Vertical")&&!Input.GetButton("Horizontal")) || Input.GetButton("Grab")) //resets if no direction is held or grab held
-			timeD.time = 0f;			
-
-		if(timeD.time!=0)
-			Debug.Log(timeD.time);		
 		
 		return Vector3.zero;		
-	}	
-
+	}
 		
-		public Vector3 displace(Level level, Vector3 position, TimeDirection timeD)
-		{			
-			if(level.getEntity(position,timeD.direction).type==states.empty) //if there is no collision ahead, and the time is large enough then move
-			{
-				timeD.time = 0f; //Resets time so unit doesn't move immediately 
-				if(level.getEntity(position,timeD.direction+Vector3.down).type==states.empty)
+		public Vector3 displace(Level level, Vector3 position, Transform transform)
+		{	
+			Vector3 forward = transform.TransformDirection(Vector3.forward);
+			if(level.getEntity(position,forward).type==states.empty) //if there is no collision ahead, and the time is large enough then move
+			{				
+				if(level.getEntity(position,forward+Vector3.down).type==states.empty)
 				{
-					return timeD.direction+Vector3.down;
-				}
-				
+					return forward+Vector3.down;
+				}				
 				else
 				{							
-					return timeD.direction; //translate object in forward direction
+					return forward; //translate object in forward direction
 				}
 			}
-			else if(level.getEntity(position,timeD.direction).type!=states.empty
+			else if(level.getEntity(position,forward).type!=states.empty
 			&& level.getEntity(position,Vector3.up).type== states.empty
-			&& level.getEntity(position+timeD.direction,Vector3.up).type==states.empty) //if not unit above the block infront, and no block above, then move up a block
-			{
-					timeD.time = 0f;
-					return Up+timeD.direction;
+			&& level.getEntity(position+forward,Vector3.up).type==states.empty) //if no unit above the block infront, and no block above, then move up a block
+			{					
+					return Up+forward;
 			}
 			
 			return Vector3.zero;

@@ -118,10 +118,13 @@ public class Level
 		Debug.Log("The final position is " + getEntity(position,move).type);		
 		
 		Entity hold = getEntity(position);
-		setMap(position,new Entity());				 
-		setMap(position,move,hold);		
+		if(move!=Vector3.zero)
+		{
+			setMap(position,new Entity());				 
+			setMap(position,move,hold);	
+		}
 		
-		animate (hold,0.15f,move,rotation);//make it unable to move during animation
+		animate (hold,0.2f,move,rotation);//make it unable to move during animation
 	}
 	
 	//moves a chain of blocks, doesn't properly account for initial position being empty, so that must be done before calling this
@@ -134,7 +137,7 @@ public class Level
 		}
 		setMap(position,move,hold);			
 		
-		animate (hold,0.15f,move,rotation);
+		animate (hold,0.2f,move,rotation);
 	}
 	
 	//handles blocks falling
@@ -180,8 +183,8 @@ public class Level
 		setMap(position1,move1,temp1);
 		setMap(position2,move2,temp2);
 		
-		animate (temp1,0.15f,move1,rotation1);
-		animate (temp2,0.15f,move2,rotation2);		
+		animate (temp1,0.2f,move1,rotation1);
+		animate (temp2,0.2f,move2,rotation2);		
 	}
 	
 	//get limits of x,y,z direction, and fixes position of blocks
@@ -269,6 +272,7 @@ public class Level
 		if (entity.type == states.character)
 		{
 			entity.obj.GetComponent<Character_base>().StartCoroutine(animation(entity,duration,initial,final,entity.obj.transform.eulerAngles,rotation));
+			entity.obj.GetComponent<Character_base>().timeD.time = 0f;
 		}
 		else if (entity.type == states.block)
 		{
@@ -280,13 +284,16 @@ public class Level
 	//sets entity to be moving, so it can't be moved while animating
 	public IEnumerator animation(Entity entity, float duration, Vector3 start, Vector3 end, Vector3 initialrotation, Vector3 rotation)
 	{		
-		entity.moving=true;
-		for(float t = 0; t < duration; t += Time.deltaTime)
-			{
-				entity.obj.transform.position = Vector3.Lerp(start, end, t/duration);	
-				yield return null;
-			}
-		entity.obj.transform.position = end; //bad  hack to fix animation not being perfect
+		entity.moving=true;	
+		if(start!=end)
+		{
+			for(float t = 0; t < duration; t += Time.deltaTime)
+				{
+					entity.obj.transform.position = Vector3.Lerp(start, end, t/duration);	
+					yield return null;
+				}
+			entity.obj.transform.position = end; //bad  hack to fix animation not being perfect
+		}
 		Debug.Log(rotation);
 		entity.obj.transform.Rotate(rotation); //double the hack, double 
 		entity.moving = false;

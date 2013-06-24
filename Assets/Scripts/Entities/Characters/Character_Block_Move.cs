@@ -24,6 +24,7 @@ public class Character_Block_Move {
 		{
 			grabbing = true;
 		}
+		//otherwise turn to block
 		else
 		{
 			List<Entity> temp = level.getsurroundingEntity(transform.position);
@@ -43,47 +44,30 @@ public class Character_Block_Move {
 		}
 		//if block is in front
    		if(grabbing)
-		{		
-			if(Input.GetButtonDown("Horizontal"))
+		{	
+			if(transform.TransformDirection(Vector3.forward)==Vector3.right||transform.TransformDirection(Vector3.forward)==Vector3.left)
 			{
-				float test = Input.GetAxis("Horizontal");
-				//if forward direction isn't global left or right, and user is pressing left or right. Return nothing.
-				if(transform.TransformDirection(Vector3.forward)!=Vector3.right&&transform.TransformDirection(Vector3.forward)!=Vector3.left)
-					return movement;
-				//otherwise we have valid input
-				else
-				{
-					if(test>0){
-						movement.Add(Vector3.right);								
-						}
-					else{
-						movement.Add(Vector3.left);
-						}	
-				}
-					
-			}		
-		
-			//same as previous section, but for up and down
-			else if(Input.GetButtonDown("Vertical"))
+				if (timeD.direction==Vector3.right)
+					movement.Add (Vector3.right);
+				else if(timeD.direction==Vector3.left)
+					movement.Add (Vector3.left);
+			}			
+			else if(transform.TransformDirection(Vector3.forward)==Vector3.forward||transform.TransformDirection(Vector3.forward)==Vector3.back)
 			{
-				float test = Input.GetAxis("Vertical");
-				if(transform.TransformDirection(Vector3.forward)!=Vector3.forward&&transform.TransformDirection(Vector3.forward)!=Vector3.back)
-					return movement;
-				else
-				{
-					if(test>0){
-						movement.Add(Vector3.forward);
-						}							
-					else{
-						movement.Add(Vector3.back);
-						}						
-				}
-			}	
+				if (timeD.direction==Vector3.forward)
+					movement.Add (Vector3.forward);
+				else if(timeD.direction==Vector3.back)
+					movement.Add (Vector3.back);
+			}
+			else{
+				return new List<Vector3>();
+			}				
+			
 			//if returning actual values, then fix up the moves to account for both objects
-			if (movement.Count>0)
+			if (movement.Count>0&&timeD.time>0.1f)
 				return move_checks(level, movement,transform);
 			}		
-		return movement;
+		return new List<Vector3>();
 		}	
 	
 	private List<Vector3> move_checks(Level level, List<Vector3> movement, Transform transform)

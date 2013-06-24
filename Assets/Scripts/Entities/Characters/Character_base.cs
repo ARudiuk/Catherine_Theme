@@ -38,15 +38,24 @@ public class Character_base : MonoBehaviour
 		block_movement = new Character_Block_Move();
 		moving = false;	
 		hanging = false;
-		timeD=new TimeDirection(0f,Vector3.forward);	//initializess the timeD varible, see bottom for structure
+		timeD=new TimeDirection(0f,Vector3.back);	//initializess the timeD varible, see bottom for structure
 		rotation = new Vector3(0,180,0); //makes character face forward
 		transform.eulerAngles = rotation;
-		timetoMove = 0.13f;
+		timetoMove = 0.15f;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{		
+		if(inputvalue()!=timeD.direction)
+		{
+			timeD.time = 0f;
+			timeD.direction = inputvalue();
+		}
+		else if(timeD.direction!=Vector3.zero)
+		{
+			timeD.time+=Time.deltaTime;
+		}
 		//if not moving get input
 		if(!moving)
 		{		
@@ -81,20 +90,22 @@ public class Character_base : MonoBehaviour
 				//EXAM THIS SECTION IN MORE DETAIL IN THE FUTURE
 				if(Input.GetButton("Grab"))
 				{					
-					List<Vector3> move = block_movement.move(level,transform,timeD,out rotation);
-					level.moveObject(transform.position,Vector3.zero,rotation);
-					if(move.Count != 0)
+					List<Vector3> move = block_movement.move(level,transform,timeD,out rotation);				
+   					if(move.Count==0&&rotation != Vector3.zero)
 					{
-						if(move.Count<=2)
-						{
-							level.movetwoObjects(transform.position,transform.position+transform.TransformDirection(Vector3.forward),move[1],move[0],Vector3.zero,Vector3.zero);//move[1] is character other is block, maybe switch around to be less confusing
-							if(move[1]==Vector3.down+transform.TransformDirection(Vector3.back))
-								hanging = true;
-						}
-						else if(move.Count>2){
-							Debug.LogError("More than two movements counted");
-						}
+						level.moveObject(transform.position,Vector3.zero,rotation);
 					}
+					else if(move.Count==2)
+					{
+						level.movetwoObjects(transform.position,transform.position+transform.TransformDirection(Vector3.forward),move[1],move[0],Vector3.zero,Vector3.zero);//move[1] is character other is block, maybe switch around to be less confusing
+						if(move[1]==Vector3.down+transform.TransformDirection(Vector3.back))
+							hanging = true;
+					}
+					else if(move.Count>2)
+					{
+						Debug.LogError("More than two movements counted");
+					}
+				
 				}
 				//if not hanging, then make sure not falling. If falling then check if you grab a ledge.				
 				else
@@ -145,6 +156,31 @@ public class Character_base : MonoBehaviour
 			}
 		}
 		return false;
-	}	
+	}
+	
+	Vector3 inputvalue()
+	{		
+		if(Input.GetButton("Horizontal"))
+			{
+				float test = Input.GetAxis("Horizontal");
+				if(test>0)
+					return Vector3.right;
+				else
+					return Vector3.left;					
+			}
+		else if(Input.GetButton("Vertical"))
+			{
+				float test = Input.GetAxis("Vertical");
+				if(test>0)
+					return Vector3.forward;
+				else
+					return Vector3.back;	
+			}
+		else 
+		{
+			return Vector3.zero;
+		}
+				
+	}
 }
 
