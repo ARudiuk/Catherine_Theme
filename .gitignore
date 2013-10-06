@@ -170,15 +170,6 @@ pip-log.txt
 
 #	 Store this file at the root of your local repository.
 
-#Unity files
-*.cginc
-*.asset
-*.GUISkin
-*.mat
-*.rendertexture
-*.physicmaterial
-*.flare:
-
 #other stuff
 /Library
 /Temp
