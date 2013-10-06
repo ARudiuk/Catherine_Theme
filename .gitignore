@@ -170,22 +170,6 @@ pip-log.txt
 
 #	 Store this file at the root of your local repository.
 
-*.bmp
-*.BMP
-*.psd
-*.PSD
-*.tif
-*.TIF
-*.tiff
-*.TIFF
-*.pdf
-*.PDF
-*.ttf
-*.TTF
-*.ZIP
-*.zip
-*.rtf
-*.png
 #Unity files
 *.cginc
 *.asset
@@ -194,24 +178,7 @@ pip-log.txt
 *.rendertexture
 *.physicmaterial
 *.flare:
-#3D tool files
-*.fbx
-*.FBX
-*.anim
-*.fbm
-*.exr
-*.otf
-*.max
-*.blend
-#Media files
-*.ogg
-*.ogv
-*.raw
-*.wav
-*.WAV
-*.wave
-*.MOV
-*.mov
+
 #other stuff
 /Library
 /Temp
